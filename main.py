@@ -2,7 +2,8 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QMenuBar, QMainWindow, QAction, qApp, QGridLayout,\
     QFileDialog
 from PlotsCanvases import MplCanvas
-from FileValidator import FileValidatorTxt
+from gui_tools import FileValidator
+import app_defs
 
 
 class PlotCompareMain(QMainWindow):
@@ -42,12 +43,14 @@ class PlotCompareMain(QMainWindow):
         self.show()
 
     def open_file_window(self):
+        ret = app_defs.NO_ACTION
         file_to_open, _ = QFileDialog.getOpenFileName(self, 'Open file')
-        if '.txt' in file_to_open:
-            txt_file_points = FileValidatorTxt.FileValidatorTxt()
-            txt_file_points.validate_txt_file(file_to_open)
+        if file_to_open:
+            txt_file_points = FileValidator.FileValidator('Main')
+            ret = txt_file_points.file_to_validate(file_to_open)
 
-
+        if ret != app_defs.NOERROR:
+            raise ResourceWarning('Unable to open or validate file, please see log file!')
 
 
 if __name__ == '__main__':
