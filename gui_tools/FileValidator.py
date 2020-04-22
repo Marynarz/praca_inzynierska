@@ -1,4 +1,5 @@
 import app_defs
+from gui_tools import logger
 
 
 class FileValidator(object):
@@ -7,6 +8,7 @@ class FileValidator(object):
 
     def __init__(self, entry_point):
         self.entry_point = entry_point
+        self.log = logger.Logger('FileValidator_' + str(self))
 
     def file_to_validate(self, source_file):
         if '.txt' in source_file:

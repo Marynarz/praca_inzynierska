@@ -1,0 +1,4 @@
+Start logging at: 1587566886.9730718 from: main_gui
+256: Begin main ui routine
+256: Selected file: /Users/Wojtek/praca_inzynierska/app_defs.py
+512: Unable to open or validate file, please see log file!

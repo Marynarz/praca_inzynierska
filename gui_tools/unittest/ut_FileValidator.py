@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../..')
+
 import unittest
 import app_defs
 from gui_tools import FileValidator
@@ -30,3 +33,7 @@ class FileValidatorTest(unittest.TestCase):
 
         self.assertEqual(returned, app_defs.NOERROR)
         self.assertListEqual(returned_list, test_class.get_values())
+
+
+if __name__ == '__main__':
+    unittest.main()
