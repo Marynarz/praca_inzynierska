@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../..')
+
 import app_defs
 import unittest
 import os
@@ -27,3 +30,7 @@ class UtLogger(unittest.TestCase):
         self.assertEqual(messages[0], lines_readed[1])
         self.assertEqual(messages[1], lines_readed[2])
         self.assertEqual(messages[2], lines_readed[3])
+
+
+if __name__ == '__main__':
+    unittest.main()
