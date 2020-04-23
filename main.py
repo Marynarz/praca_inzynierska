@@ -40,7 +40,7 @@ class PlotCompareMain(QWidget):
 
         main_layout = QGridLayout()
         main_layout.addWidget(menu)
-        main_layout.addWidget(self.mat_plot_lib_canvas)
+        main_layout.addWidget(self.mat_plot_lib_canvas, 0, 0)
 
         # main window
         self.setLayout(main_layout)

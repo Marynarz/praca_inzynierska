@@ -1,1 +1,2 @@
 import gui_tools.FileValidator
+import gui_tools.logger
