@@ -26,7 +26,7 @@ class FileValidatorTest(unittest.TestCase):
         self.assertEqual(returned, app_defs.UNKNOWN_FILE_TYPE)
 
     def test03_txt_file_validate(self):
-        returned_list = [(1, 2), (3, 2), (10, 3), (-1, -1)]
+        returned_list = [(-1, -1), (1, 2), (3, 2), (10, 3)]
         test_class = FileValidator.FileValidator('test')
 
         returned = test_class.file_to_validate('ut_data/test_data.txt')

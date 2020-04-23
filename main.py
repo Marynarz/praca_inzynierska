@@ -35,12 +35,12 @@ class PlotCompareMain(QWidget):
         file_opt.addAction(exit_action)
 
         # plots
-        mat_plot_lib_canvas = MplCanvas.MplCanvas(parent=self, x=10, y=10, dpi=100)
-        mat_plot_lib_canvas.axes.plot([0,1,2,3,4], [10,1,20,3,40])
+        self.mat_plot_lib_canvas = MplCanvas.MplCanvas(parent=self, x=10, y=10, dpi=100)
+        self.mat_plot_lib_canvas.axes.plot([0, 1], [0, 1])
 
         main_layout = QGridLayout()
-        main_layout.addWidget(mat_plot_lib_canvas)
         main_layout.addWidget(menu)
+        main_layout.addWidget(self.mat_plot_lib_canvas)
 
         # main window
         self.setLayout(main_layout)
@@ -49,11 +49,12 @@ class PlotCompareMain(QWidget):
 
     def open_file_window(self):
         ret = app_defs.NO_ACTION
-        file_to_open, _ = QFileDialog.getOpenFileName(self, 'Open file')
+        file_to_open, _ = QFileDialog.getOpenFileName(self, 'Open file',
+                                                      filter='TextFile (*.txt);;XML (*.xml);;JSON (*.json)')
         self.log.write_log(app_defs.INFO_MSG, 'Selected file: ' + str(file_to_open))
         if file_to_open:
-            txt_file_points = FileValidator.FileValidator('Main')
-            ret = txt_file_points.file_to_validate(file_to_open)
+            file_points = FileValidator.FileValidator('Main')
+            ret = file_points.file_to_validate(file_to_open)
 
         if ret != app_defs.NOERROR:
             if ret == app_defs.UNKNOWN_FILE_TYPE:
@@ -62,9 +63,24 @@ class PlotCompareMain(QWidget):
                                             'File: %s cannot be open. File type unknown.' % file_to_open,
                                             QMessageBox.Ok, QMessageBox.Ok)
             elif ret == app_defs.UNABLE_TO_OPEN_FILE:
+                self.log.write_log(app_defs.ERROR_MSG, 'Unable to open file! File: %s' % file_to_open)
                 _ = QMessageBox.warning(self, 'Unknown file type',
                                         'File: %s unable to open. Please see log file!' % file_to_open,
                                         QMessageBox.Ok, QMessageBox.Ok)
+        elif ret == app_defs.NOERROR:
+            self.log.write_log(app_defs.INFO_MSG, 'File validated succefully, proceed to load and plot data.')
+            self.load_and_plot_data(file_points.get_values())
+
+    def load_and_plot_data(self, data):
+        self.log.write_log(app_defs.INFO_MSG, 'Load and plot data')
+        x = []
+        y = []
+        for line in data:
+            print(line)
+            x.append(line[0])
+            y.append(line[1])
+        self.log.write_log(app_defs.INFO_MSG, 'Data to plot: x:%s | y:%s' % (x, y))
+        self.mat_plot_lib_canvas.update_canvas(x=x, y=y)
 
 
 if __name__ == '__main__':

@@ -1,3 +1,6 @@
-Start logging at: 1587583208.031851 from: main_gui
+Start logging at: 1587657500.696222 from: main_gui
 256: Begin main ui routine
-256: Selected file: /Users/Wojtek/praca_inzynierska/gui_tools/unittest/ut_data/test_data.txt
+256: Selected file: C:/Users/Asia/praca_inzynierska/gui_tools/unittest/ut_data/test_data.txt
+256: File validated succefully, proceed to load and plot data.
+256: Load and plot data
+256: Data to plot: x:[1, 3, 10, -1] | y:[2, 2, 3, -1]
