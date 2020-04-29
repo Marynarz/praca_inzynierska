@@ -1,9 +1,11 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMenuBar, QMainWindow, QAction, qApp, QGridLayout,\
-    QFileDialog, QMessageBox, QMenu
+
+from PyQt5.QtWidgets import QApplication, QWidget, QMenuBar, QAction, qApp, QGridLayout, \
+    QFileDialog, QMessageBox
+import app_defs
+from PlotsCanvases import BokehCanvas
 from PlotsCanvases import MplCanvas
 from gui_tools import FileValidator, logger
-import app_defs
 
 
 class PlotCompareMain(QWidget):
@@ -15,6 +17,9 @@ class PlotCompareMain(QWidget):
             print(e)
             sys.exit(0)
 
+        self.mat_plot_lib_canvas = MplCanvas.MplCanvas(parent=self, x=10, y=10, dpi=100)
+        self.bokeh_canvas = BokehCanvas.BokehCanvas()
+        self.setStyleSheet(open('gui_tools/main_style.css').read())
         self.init_ui_layout()
 
     def init_ui_layout(self):
@@ -35,12 +40,13 @@ class PlotCompareMain(QWidget):
         file_opt.addAction(exit_action)
 
         # plots
-        self.mat_plot_lib_canvas = MplCanvas.MplCanvas(parent=self, x=10, y=10, dpi=100)
-        self.mat_plot_lib_canvas.axes.plot([0, 1], [0, 1])
+        self.load_and_plot_data(app_defs.DEFAULT_PLOT)
+
+
 
         main_layout = QGridLayout()
         main_layout.addWidget(menu)
-        main_layout.addWidget(self.mat_plot_lib_canvas, 0, 0)
+        main_layout.addWidget(self.mat_plot_lib_canvas, 1, 0)
 
         # main window
         self.setLayout(main_layout)

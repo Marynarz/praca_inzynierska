@@ -1,2 +1,5 @@
-Start logging at: 1587673372.310296 from: main_gui
+Start logging at: 1588168841.4494967 from: main_gui
 256: Begin main ui routine
+256: Load and plot data
+256: Data to plot: x:[-100, -50, 0, 50, 100] | y:[50, -50, 0, -50, 50]
+256: Selected file: 
