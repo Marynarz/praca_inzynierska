@@ -27,7 +27,7 @@ class FileValidator(object):
             self.log.write_log(app_defs.INFO_MSG, '%s: Unknown file type for file: {%s}' % (fname, source_file))
             return app_defs.UNKNOWN_FILE_TYPE
 
-    def validate_txt_file(self, source_file):
+    def validate_txt_file(self, source_file, sort=False):
         fname = self.FNAME_PATTERN % 'validate_txt_file'
         self.log.write_log(app_defs.INFO_MSG, '%s: txt file chosen, validate' % fname)
         try:
@@ -36,10 +36,12 @@ class FileValidator(object):
                 for line in file:
                     tmp_str = line.split(' ')
                     self.values.append((int(tmp_str[0]), int(tmp_str[1])))
-                    self.sort_values()
         except Exception as e:
             self.log.write_log(app_defs.ERROR_MSG, ' %s: Exception when validating file. {error=%s}' % (fname, e))
             raise e
+
+        if sort:
+            self.sort_values()
 
     def sort_values(self):
         self.values.sort(key=operator.itemgetter(0))
