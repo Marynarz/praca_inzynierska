@@ -6,8 +6,8 @@ def gen_data(min_val=-10, max_val=10, lines_number=10, file_name='test_data.txt'
     with open(file_name, 'w')as f:
         for i in range(0, lines_number):
             x = i
-            y = random.randrange(min_val, max_val, 1)
-            f.write('%f %f\n' % (x, y))
+            y = random.randrange(min_val, max_val*1000, 1)
+            f.write('%f %f\n' % (x, y/1000))
     print('OK!')
 
 

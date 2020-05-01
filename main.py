@@ -2,6 +2,8 @@ import sys
 
 from PyQt5.QtWidgets import QApplication, QWidget, QMenuBar, QAction, qApp, QGridLayout, \
     QFileDialog, QMessageBox
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtCore import QUrl
 import app_defs
 from PlotsCanvases import BokehCanvas
 from PlotsCanvases import MplCanvas
@@ -41,12 +43,13 @@ class PlotCompareMain(QWidget):
 
         # plots
         self.load_and_plot_data(app_defs.DEFAULT_PLOT)
-
-
+        bokeh_view = QWebEngineView(self)
+        bokeh_view.load(QUrl('qrc:/bokeh_plot.html'))
 
         main_layout = QGridLayout()
         main_layout.addWidget(menu)
         main_layout.addWidget(self.mat_plot_lib_canvas, 1, 0)
+        main_layout.addWidget(bokeh_view, 2, 0)
 
         # main window
         self.setLayout(main_layout)
@@ -86,6 +89,8 @@ class PlotCompareMain(QWidget):
             y.append(line[1])
         self.log.write_log(app_defs.INFO_MSG, 'Data to plot: x:%s | y:%s' % (x, y))
         self.mat_plot_lib_canvas.update_canvas(x=x, y=y)
+        self.bokeh_canvas.load_data(x=x, y=y)
+        self.bokeh_canvas.show_output()
 
 
 if __name__ == '__main__':

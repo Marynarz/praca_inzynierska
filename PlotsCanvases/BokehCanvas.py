@@ -1,5 +1,5 @@
 from bokeh.plotting import figure
-from bokeh.io import show, output_notebook
+from bokeh.io import output_file, save
 
 
 class BokehCanvas(object):
@@ -15,5 +15,6 @@ class BokehCanvas(object):
         self.show_output()
 
     def show_output(self):
-        output_notebook()
-        show(self.fig)
+        # output_notebook()
+        output_file('bokeh_plot.html')
+        save(self.fig)
