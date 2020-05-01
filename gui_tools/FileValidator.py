@@ -35,7 +35,7 @@ class FileValidator(object):
                 self.values.clear()
                 for line in file:
                     tmp_str = line.split(' ')
-                    self.values.append((int(tmp_str[0]), int(tmp_str[1])))
+                    self.values.append((float(tmp_str[0]), float(tmp_str[1])))
         except Exception as e:
             self.log.write_log(app_defs.ERROR_MSG, ' %s: Exception when validating file. {error=%s}' % (fname, e))
             raise e

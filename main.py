@@ -82,7 +82,6 @@ class PlotCompareMain(QWidget):
         x = []
         y = []
         for line in data:
-            print(line)
             x.append(line[0])
             y.append(line[1])
         self.log.write_log(app_defs.INFO_MSG, 'Data to plot: x:%s | y:%s' % (x, y))
