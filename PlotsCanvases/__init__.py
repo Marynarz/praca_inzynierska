@@ -1,2 +1,1 @@
-import PlotsCanvases.MplCanvas
-import PlotsCanvases.BokehCanvas
+from .MplCanvas import *

@@ -1,6 +1,6 @@
 import matplotlib
 matplotlib.use('Qt5Agg')
-from PyQt5 import QtWidgets
+from PySide6 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 
@@ -16,9 +16,7 @@ class MplCanvas(FigureCanvasQTAgg):
         self.now_y = [y]
         self.grid = False
 
-        FigureCanvasQTAgg.setSizePolicy(self,
-                                   QtWidgets.QSizePolicy.Expanding,
-                                   QtWidgets.QSizePolicy.Expanding)
+        FigureCanvasQTAgg.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         FigureCanvasQTAgg.updateGeometry(self)
 
     def update_canvas(self, x, y):

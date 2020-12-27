@@ -1,11 +1,9 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QWidget, QMenuBar, QAction, qApp, QGridLayout, \
-    QFileDialog, QMessageBox
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtCore import QUrl
+from PySide6.QtWidgets import QApplication, QWidget, QMenuBar, QGridLayout, QFileDialog, QMessageBox
+from PySide6.QtCore import QUrl
 import app_defs
-from PlotsCanvases import BokehCanvas
+# from PlotsCanvases import BokehCanvas
 from PlotsCanvases import MplCanvas
 from gui_tools import FileValidator, logger
 
@@ -20,37 +18,17 @@ class PlotCompareMain(QWidget):
             sys.exit(0)
 
         self.mat_plot_lib_canvas = MplCanvas.MplCanvas(parent=self, x=10, y=10, dpi=100)
-        self.bokeh_canvas = BokehCanvas.BokehCanvas()
+        #self.bokeh_canvas = BokehCanvas.BokehCanvas()
         self.setStyleSheet(open('gui_tools/main_style.css').read())
         self.init_ui_layout()
 
     def init_ui_layout(self):
         self.log.write_log(app_defs.INFO_MSG, 'Begin main ui routine')
-        # menu:
-        exit_action = QAction(' &Exit', self)
-        exit_action.setShortcut('Ctrl+Q')
-        exit_action.triggered.connect(qApp.quit)
-
-        open_file = QAction('&Open', self)
-        open_file.setShortcut('Ctrl+O')
-        open_file.triggered.connect(self.open_file_window)
-
-        menu = QMenuBar()
-
-        file_opt = menu.addMenu('&File')
-        file_opt.addAction(open_file)
-        file_opt.addAction(exit_action)
-
         # plots
         self.load_and_plot_data(app_defs.DEFAULT_PLOT)
-        bokeh_view = QWebEngineView(self)
-        bokeh_view.load(QUrl('qrc:/bokeh_plot.html'))
 
         main_layout = QGridLayout()
-        main_layout.addWidget(menu)
         main_layout.addWidget(self.mat_plot_lib_canvas, 1, 0)
-        main_layout.addWidget(bokeh_view, 2, 0)
-
         # main window
         self.setLayout(main_layout)
         self.setWindowTitle('Praca inzynierska - W. Niedzielski - 2020')
