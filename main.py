@@ -17,7 +17,7 @@ class PlotCompareMain(QWidget):
             print(e)
             sys.exit(0)
 
-        self.mat_plot_lib_canvas = MplCanvas.MplCanvas(parent=self, x=10, y=10, dpi=100)
+        self.mat_plot_lib_canvas = MplCanvas(parent=self, x=10, y=10, dpi=100)
         #self.bokeh_canvas = BokehCanvas.BokehCanvas()
         self.setStyleSheet(open('gui_tools/main_style.css').read())
         self.init_ui_layout()
