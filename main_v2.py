@@ -1,9 +1,10 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, QWidget, QAction
+from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, QWidget, QAction, QFileDialog,\
+    QMessageBox
 from PyQt5.QtCore import QSettings
 from defs import str_defs, app_defs
-from gui_tools import logger
+from gui_tools import logger, FileValidator
 
 
 class MainWindow(QMainWindow):
@@ -37,8 +38,12 @@ class MainWindow(QMainWindow):
     def _create_menu(self):
         self.menu = self.menuBar().addMenu(str_defs.MENU)
         # new
-
         self.menu.addAction(str_defs.NEW_APP[self.language], self.reset)
+
+        file_open = QAction(str_defs.FILE_OPEN[self.language], self)
+        file_open.setShortcut('Ctrl+O')
+        self.menu.addAction(file_open)
+        file_open.triggered.connect(self.open_file_window)
 
         # exit section
         self.menu.addSeparator()
@@ -64,15 +69,43 @@ class MainWindow(QMainWindow):
         change_lang_action_eng.triggered.connect(lambda x: self.set_lang(str_defs.LANG_ENG))
 
     def _create_status_bar(self):
-        status = QStatusBar()
-        status.showMessage('OK')
-        self.setStatusBar(status)
+        self.status = QStatusBar()
+        self.status.showMessage('OK')
+        self.setStatusBar(self.status)
+
+    def set_status(self, status):
+        self.status.showMessage(status)
 
     def reset(self):
         pass
 
     def set_lang(self, lang):
         self.settings.setValue('lang', lang)
+        self.set_status('Lang set to '+lang)
+
+    def open_file_window(self):
+        ret = app_defs.NO_ACTION
+        file_to_open, _ = QFileDialog.getOpenFileName(self, 'Open file',
+                                                      filter='TextFile (*.txt);;CSV (*.csv)')
+        self.log.write_log(app_defs.INFO_MSG, 'Selected file: ' + str(file_to_open))
+        if file_to_open:
+            file_points = FileValidator.FileValidator('Main')
+            ret = file_points.file_to_validate(file_to_open)
+
+        if ret != app_defs.NOERROR:
+            if ret == app_defs.UNKNOWN_FILE_TYPE:
+                self.log.write_log(app_defs.WARNING_MSG, 'Unknown file type! File: %s' % file_to_open)
+                _ = QMessageBox.information(self, 'Unknown file type',
+                                            'File: %s cannot be open. File type unknown.' % file_to_open,
+                                            QMessageBox.Ok, QMessageBox.Ok)
+            elif ret == app_defs.UNABLE_TO_OPEN_FILE:
+                self.log.write_log(app_defs.ERROR_MSG, 'Unable to open file! File: %s' % file_to_open)
+                _ = QMessageBox.warning(self, 'Unknown file type',
+                                        'File: %s unable to open. Please see log file!' % file_to_open,
+                                        QMessageBox.Ok, QMessageBox.Ok)
+        elif ret == app_defs.NOERROR:
+            self.log.write_log(app_defs.INFO_MSG, 'File validated succefully, proceed to load and plot data.')
+            #self.load_and_plot_data(file_points.get_values())
 
 
 if __name__ == '__main__':

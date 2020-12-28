@@ -1,12 +1,14 @@
 from defs import app_defs
 import operator
 from gui_tools import logger
+import csv
 
 
 class FileValidator(object):
     # value = (x, y)
     values = []
     FNAME_PATTERN = 'FileValidator.%s'
+    validators_dict = {'txt': 'self.validate_txt_file', 'csv': 'self.validate_csv_file'}
 
     def __init__(self, entry_point):
         self.entry_point = entry_point
@@ -14,18 +16,20 @@ class FileValidator(object):
 
     def file_to_validate(self, source_file):
         fname = self.FNAME_PATTERN % 'file_to_validate'
-        if '.txt' in source_file:
-            self.log.write_log(app_defs.INFO_MSG, '%s: TXT file chosen to validate: {%s}' % (fname, source_file))
-            try:
-                self.validate_txt_file(source_file)
-            except Exception as e:
-                self.log.write_log(app_defs.ERROR_MSG, '%s: Exception while handling file: %s, exception details {%s}'
-                                   % (fname, source_file, e))
-                return app_defs.UNABLE_TO_OPEN_FILE
-            return app_defs.NOERROR
-        else:
+
+        filetype = source_file.split('.')[-1]
+        try:
+            self.log.write_log(app_defs.INFO_MSG, '%s: file type chosen to validate: {%s}' % (fname, filetype))
+            eval(self.validators_dict[filetype])(source_file)
+        except KeyError as e:
             self.log.write_log(app_defs.INFO_MSG, '%s: Unknown file type for file: {%s}' % (fname, source_file))
             return app_defs.UNKNOWN_FILE_TYPE
+        except Exception as e:
+            self.log.write_log(app_defs.ERROR_MSG, '%s: Exception while handling file: %s, exception details {%s}'
+                               % (fname, source_file, e))
+            return app_defs.UNABLE_TO_OPEN_FILE
+        else:
+            return app_defs.NOERROR
 
     def validate_txt_file(self, source_file, sort=False):
         fname = self.FNAME_PATTERN % 'validate_txt_file'
@@ -39,6 +43,18 @@ class FileValidator(object):
         except Exception as e:
             self.log.write_log(app_defs.ERROR_MSG, ' %s: Exception when validating file. {error=%s}' % (fname, e))
             raise e
+
+        if sort:
+            self.sort_values()
+
+    def validate_csv_file(self, source_file, sort=False):
+        fname = self.FNAME_PATTERN % 'validate_csv_file'
+        self.log.write_log(app_defs.INFO_MSG, '%s: csv file chosen, validate' % fname)
+
+        with open(source_file, newline='') as file:
+            reader = csv.reader(file, dialect='excel')
+            for row in reader:
+                self.values.append((float(row[0]), float(row[1])))
 
         if sort:
             self.sort_values()
