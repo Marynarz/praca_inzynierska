@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, 
 from PyQt5.QtCore import QSettings
 from defs import str_defs, app_defs
 from gui_tools import logger, FileValidator
-from PlotsCanvases import MplCanvas, PyQtGraphCanvas, BokehCanvas
+from PlotsCanvases import MplCanvas, PyQtGraphCanvas, BokehCanvas, PlotLyCanvas
 
 
 class MainWindow(QMainWindow):
@@ -16,6 +16,7 @@ class MainWindow(QMainWindow):
         self.mat_plot_lib_canvas = MplCanvas(parent=self, x=10, y=10, dpi=100)
         self.bokeh_canvas = BokehCanvas()
         self.py_qt_graph = PyQtGraphCanvas()
+        self.plotly_canvas = PlotLyCanvas()
 
         try:
             self.log = logger.Logger('main_gui')
@@ -53,6 +54,12 @@ class MainWindow(QMainWindow):
         self.bokeh_layout.addWidget(bokeh_label)
         self.bokeh_layout.addWidget(self.bokeh_canvas)
 
+        # plotly layout
+        self.plotly_layout = QVBoxLayout()
+        plotly_label = QLabel(str_defs.BOKEH)
+        self.plotly_layout.addWidget(plotly_label)
+        self.plotly_layout.addWidget(self.plotly_canvas)
+
         # Setting central widget
         self.general_layout = QGridLayout()
         self.general_layout.setRowMinimumHeight(1, 200)
@@ -62,6 +69,7 @@ class MainWindow(QMainWindow):
         self.general_layout.addLayout(self.mat_plot_lib_layout, 0, 0)
         self.general_layout.addLayout(self.qt_graph_layout, 0, 1)
         self.general_layout.addLayout(self.bokeh_layout, 1, 0)
+        self.general_layout.addLayout(self.plotly_layout, 1, 1)
 
         self._create_menu()
         self._create_status_bar()
