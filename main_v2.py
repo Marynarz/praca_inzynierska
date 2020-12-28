@@ -5,11 +5,13 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, 
 from PyQt5.QtCore import QSettings
 from defs import str_defs, app_defs
 from gui_tools import logger, FileValidator
+from PlotsCanvases import MplCanvas
 
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.mat_plot_lib_canvas = MplCanvas(parent=self, x=10, y=10, dpi=100)
         try:
             self.log = logger.Logger('main_gui')
         except Exception as e:
@@ -25,12 +27,14 @@ class MainWindow(QMainWindow):
         self.log.write_log(app_defs.INFO_MSG, 'Hello main gui\t--\tV2.00')
         self.log.write_log(app_defs.ERROR_MSG, 'lang: %s, type: %s' % (self.language, type(self.language)))
         self.setWindowTitle(str_defs.MAIN_WINDOW_TITLE[self.language])
+        self.load_and_plot_data(app_defs.DEFAULT_PLOT)
 
         # Setting central widget
         self.general_layout = QGridLayout()
         self._central_widget = QWidget(self)
         self.setCentralWidget(self._central_widget)
         self._central_widget.setLayout(self.general_layout)
+        self.general_layout.addWidget(self.mat_plot_lib_canvas, 0, 0)
 
         self._create_menu()
         self._create_status_bar()
@@ -105,7 +109,17 @@ class MainWindow(QMainWindow):
                                         QMessageBox.Ok, QMessageBox.Ok)
         elif ret == app_defs.NOERROR:
             self.log.write_log(app_defs.INFO_MSG, 'File validated succefully, proceed to load and plot data.')
-            #self.load_and_plot_data(file_points.get_values())
+            self.load_and_plot_data(file_points.get_values())
+
+    def load_and_plot_data(self, data):
+        self.log.write_log(app_defs.INFO_MSG, 'Load and plot data')
+        x = []
+        y = []
+        for line in data:
+            x.append(line[0])
+            y.append(line[1])
+        self.log.write_log(app_defs.INFO_MSG, 'Data to plot: x:%s | y:%s' % (x, y))
+        self.mat_plot_lib_canvas.update_canvas(x=x, y=y)
 
 
 if __name__ == '__main__':
