@@ -1,8 +1,7 @@
 import sys
 
-from PySide6.QtWidgets import QApplication, QWidget, QMenuBar, QGridLayout, QFileDialog, QMessageBox
-from PySide6.QtCore import QUrl
-import app_defs
+from PySide6.QtWidgets import QApplication, QWidget, QGridLayout, QFileDialog, QMessageBox
+from defs import app_defs
 # from PlotsCanvases import BokehCanvas
 from PlotsCanvases import MplCanvas
 from gui_tools import FileValidator, logger

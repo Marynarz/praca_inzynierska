@@ -2,7 +2,7 @@ import sys
 sys.path.append('../..')
 
 import unittest
-import app_defs
+from defs import app_defs
 from gui_tools import FileValidator
 
 

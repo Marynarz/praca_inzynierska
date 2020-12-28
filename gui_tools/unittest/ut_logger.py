@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../..')
 
-import app_defs
+from defs import app_defs
 import unittest
 import os
 from gui_tools import logger

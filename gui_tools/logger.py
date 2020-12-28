@@ -1,4 +1,4 @@
-import app_defs
+from defs import app_defs
 import time
 import os
 
