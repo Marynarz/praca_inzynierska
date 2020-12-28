@@ -14,3 +14,7 @@ SETTINGS_MENU = {LANG_PL: '&Ustawienia', LANG_ENG: '&Settings'}
 LANG_CHANGE = {LANG_PL: '&Jezyk', LANG_ENG: '&Language'}
 POLISH = {LANG_PL: '&Polski', LANG_ENG: '&Polish'}
 ENGLISH = {LANG_PL: '&Angielski', LANG_ENG: '&English'}
+
+# components
+MAT_PLOT_LIB = 'Matplotlib'
+QTGRAPH = 'PyQtGraph'

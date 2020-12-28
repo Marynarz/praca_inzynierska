@@ -1,7 +1,7 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, QWidget, QAction, QFileDialog,\
-    QMessageBox
+    QMessageBox, QVBoxLayout, QLabel
 from PyQt5.QtCore import QSettings
 from defs import str_defs, app_defs
 from gui_tools import logger, FileValidator
@@ -30,13 +30,24 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(str_defs.MAIN_WINDOW_TITLE[self.language])
         self.load_and_plot_data(app_defs.DEFAULT_PLOT)
 
+        # setting layouts
+        self.mat_plot_lib_layout = QVBoxLayout()
+        mat_plot_lib_label = QLabel(str_defs.MAT_PLOT_LIB)
+        self.mat_plot_lib_layout.addWidget(mat_plot_lib_label)
+        self.mat_plot_lib_layout.addWidget(self.mat_plot_lib_canvas)
+
+        self.qt_graph_layout = QVBoxLayout()
+        qt_graph_label = QLabel(str_defs.QTGRAPH)
+        self.qt_graph_layout.addWidget(qt_graph_label)
+        self.qt_graph_layout.addWidget(self.py_qt_graph)
+
         # Setting central widget
         self.general_layout = QGridLayout()
         self._central_widget = QWidget(self)
         self.setCentralWidget(self._central_widget)
         self._central_widget.setLayout(self.general_layout)
-        self.general_layout.addWidget(self.mat_plot_lib_canvas, 0, 0)
-        self.general_layout.addWidget(self.py_qt_graph, 0, 1)
+        self.general_layout.addLayout(self.mat_plot_lib_layout, 0, 0)
+        self.general_layout.addLayout(self.qt_graph_layout, 0, 1)
 
         self._create_menu()
         self._create_status_bar()
@@ -115,11 +126,8 @@ class MainWindow(QMainWindow):
 
     def load_and_plot_data(self, data):
         self.log.write_log(app_defs.INFO_MSG, 'Load and plot data')
-        x = []
-        y = []
-        for line in data:
-            x.append(line[0])
-            y.append(line[1])
+        x = [line[0] for line in data]
+        y = [line[1] for line in data]
         self.log.write_log(app_defs.INFO_MSG, 'Data to plot: x:%s | y:%s' % (x, y))
         self.mat_plot_lib_canvas.update_canvas(x=x, y=y)
         self.py_qt_graph.update_canvas(x=x, y=y)
