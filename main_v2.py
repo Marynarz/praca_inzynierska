@@ -5,14 +5,18 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, 
 from PyQt5.QtCore import QSettings
 from defs import str_defs, app_defs
 from gui_tools import logger, FileValidator
-from PlotsCanvases import MplCanvas, PyQtGraphCanvas
+from PlotsCanvases import MplCanvas, PyQtGraphCanvas, BokehCanvas
 
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        # prepare conveses
         self.mat_plot_lib_canvas = MplCanvas(parent=self, x=10, y=10, dpi=100)
+        self.bokeh_canvas = BokehCanvas()
         self.py_qt_graph = PyQtGraphCanvas()
+
         try:
             self.log = logger.Logger('main_gui')
         except Exception as e:
@@ -31,23 +35,33 @@ class MainWindow(QMainWindow):
         self.load_and_plot_data(app_defs.DEFAULT_PLOT)
 
         # setting layouts
+        # matplotlib layout
         self.mat_plot_lib_layout = QVBoxLayout()
         mat_plot_lib_label = QLabel(str_defs.MAT_PLOT_LIB)
         self.mat_plot_lib_layout.addWidget(mat_plot_lib_label)
         self.mat_plot_lib_layout.addWidget(self.mat_plot_lib_canvas)
 
+        # qt graph layout
         self.qt_graph_layout = QVBoxLayout()
         qt_graph_label = QLabel(str_defs.QTGRAPH)
         self.qt_graph_layout.addWidget(qt_graph_label)
         self.qt_graph_layout.addWidget(self.py_qt_graph)
 
+        # bokeh layout
+        self.bokeh_layout = QVBoxLayout()
+        bokeh_label = QLabel(str_defs.BOKEH)
+        self.bokeh_layout.addWidget(bokeh_label)
+        self.bokeh_layout.addWidget(self.bokeh_canvas)
+
         # Setting central widget
         self.general_layout = QGridLayout()
+        self.general_layout.setRowMinimumHeight(1, 200)
         self._central_widget = QWidget(self)
         self.setCentralWidget(self._central_widget)
         self._central_widget.setLayout(self.general_layout)
         self.general_layout.addLayout(self.mat_plot_lib_layout, 0, 0)
         self.general_layout.addLayout(self.qt_graph_layout, 0, 1)
+        self.general_layout.addLayout(self.bokeh_layout, 1, 0)
 
         self._create_menu()
         self._create_status_bar()

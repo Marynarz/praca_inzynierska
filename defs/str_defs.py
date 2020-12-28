@@ -18,3 +18,4 @@ ENGLISH = {LANG_PL: '&Angielski', LANG_ENG: '&English'}
 # components
 MAT_PLOT_LIB = 'Matplotlib'
 QTGRAPH = 'PyQtGraph'
+BOKEH = 'Bokeh'
