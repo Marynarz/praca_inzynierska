@@ -5,13 +5,14 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, 
 from PyQt5.QtCore import QSettings
 from defs import str_defs, app_defs
 from gui_tools import logger, FileValidator
-from PlotsCanvases import MplCanvas
+from PlotsCanvases import MplCanvas, PyQtGraphCanvas
 
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.mat_plot_lib_canvas = MplCanvas(parent=self, x=10, y=10, dpi=100)
+        self.py_qt_graph = PyQtGraphCanvas()
         try:
             self.log = logger.Logger('main_gui')
         except Exception as e:
@@ -35,6 +36,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self._central_widget)
         self._central_widget.setLayout(self.general_layout)
         self.general_layout.addWidget(self.mat_plot_lib_canvas, 0, 0)
+        self.general_layout.addWidget(self.py_qt_graph, 0, 1)
 
         self._create_menu()
         self._create_status_bar()
@@ -120,6 +122,7 @@ class MainWindow(QMainWindow):
             y.append(line[1])
         self.log.write_log(app_defs.INFO_MSG, 'Data to plot: x:%s | y:%s' % (x, y))
         self.mat_plot_lib_canvas.update_canvas(x=x, y=y)
+        self.py_qt_graph.update_canvas(x=x, y=y)
 
 
 if __name__ == '__main__':
