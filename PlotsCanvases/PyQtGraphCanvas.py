@@ -1,6 +1,9 @@
 import pyqtgraph as pg
+from abc import register
+from BaseCanvas import BaseCanvas
 
 
+@BaseCanvas.register
 class PyQtGraphCanvas(pg.PlotWidget):
     def __init__(self):
         super().__init__()
