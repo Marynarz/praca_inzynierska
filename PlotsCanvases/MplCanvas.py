@@ -3,8 +3,11 @@ matplotlib.use('Qt5Agg')
 from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+from abc import register
+from BaseCanvas import BaseCanvas
 
 
+@BaseCanvas.register
 class MplCanvas(FigureCanvasQTAgg):
 
     def __init__(self, parent=None, x=10, y=10, dpi=100):
