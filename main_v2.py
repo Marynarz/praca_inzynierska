@@ -12,7 +12,7 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        # prepare conveses
+        # prepare canveses
         self.mat_plot_lib_canvas = MplCanvas(parent=self, x=10, y=10, dpi=100)
         self.bokeh_canvas = BokehCanvas()
         self.py_qt_graph = PyQtGraphCanvas()
@@ -35,30 +35,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(str_defs.MAIN_WINDOW_TITLE[self.language])
         self.load_and_plot_data(app_defs.DEFAULT_PLOT)
 
-        # setting layouts
-        # matplotlib layout
-        self.mat_plot_lib_layout = QVBoxLayout()
-        mat_plot_lib_label = QLabel(str_defs.MAT_PLOT_LIB)
-        self.mat_plot_lib_layout.addWidget(mat_plot_lib_label)
-        self.mat_plot_lib_layout.addWidget(self.mat_plot_lib_canvas)
-
-        # qt graph layout
-        self.qt_graph_layout = QVBoxLayout()
-        qt_graph_label = QLabel(str_defs.QTGRAPH)
-        self.qt_graph_layout.addWidget(qt_graph_label)
-        self.qt_graph_layout.addWidget(self.py_qt_graph)
-
-        # bokeh layout
-        self.bokeh_layout = QVBoxLayout()
-        bokeh_label = QLabel(str_defs.BOKEH)
-        self.bokeh_layout.addWidget(bokeh_label)
-        self.bokeh_layout.addWidget(self.bokeh_canvas)
-
-        # plotly layout
-        self.plotly_layout = QVBoxLayout()
-        plotly_label = QLabel(str_defs.BOKEH)
-        self.plotly_layout.addWidget(plotly_label)
-        self.plotly_layout.addWidget(self.plotly_canvas)
+        self._create_canvases_layouts()
 
         # Setting central widget
         self.general_layout = QGridLayout()
@@ -112,6 +89,32 @@ class MainWindow(QMainWindow):
         self.status.showMessage('OK')
         self.setStatusBar(self.status)
 
+    def _create_canvases_layouts(self):
+        # setting layouts
+        # matplotlib layout
+        self.mat_plot_lib_layout = QVBoxLayout()
+        mat_plot_lib_label = QLabel(str_defs.MAT_PLOT_LIB)
+        self.mat_plot_lib_layout.addWidget(mat_plot_lib_label)
+        self.mat_plot_lib_layout.addWidget(self.mat_plot_lib_canvas)
+
+        # qt graph layout
+        self.qt_graph_layout = QVBoxLayout()
+        qt_graph_label = QLabel(str_defs.QTGRAPH)
+        self.qt_graph_layout.addWidget(qt_graph_label)
+        self.qt_graph_layout.addWidget(self.py_qt_graph)
+
+        # bokeh layout
+        self.bokeh_layout = QVBoxLayout()
+        bokeh_label = QLabel(str_defs.BOKEH)
+        self.bokeh_layout.addWidget(bokeh_label)
+        self.bokeh_layout.addWidget(self.bokeh_canvas)
+
+        # plotly layout
+        self.plotly_layout = QVBoxLayout()
+        plotly_label = QLabel(str_defs.PLOTLY)
+        self.plotly_layout.addWidget(plotly_label)
+        self.plotly_layout.addWidget(self.plotly_canvas)
+
     def set_status(self, status):
         self.status.showMessage(status)
 
@@ -143,7 +146,7 @@ class MainWindow(QMainWindow):
                                         'File: %s unable to open. Please see log file!' % file_to_open,
                                         QMessageBox.Ok, QMessageBox.Ok)
         elif ret == app_defs.NOERROR:
-            self.log.write_log(app_defs.INFO_MSG, 'File validated succefully, proceed to load and plot data.')
+            self.log.write_log(app_defs.INFO_MSG, 'File validated successfully, proceed to load and plot data.')
             self.load_and_plot_data(file_points.get_values())
 
     def load_and_plot_data(self, data):
@@ -151,8 +154,9 @@ class MainWindow(QMainWindow):
         x = [line[0] for line in data]
         y = [line[1] for line in data]
         self.log.write_log(app_defs.INFO_MSG, 'Data to plot: x:%s | y:%s' % (x, y))
-        self.mat_plot_lib_canvas.update_canvas(x=x, y=y)
-        self.py_qt_graph.update_canvas(x=x, y=y)
+        self.mat_plot_lib_canvas.upload_data(x=x, y=y)
+        self.py_qt_graph.upload_data(x=x, y=y)
+        self.plotly_canvas.upload_data(x=x, y=y)
 
 
 if __name__ == '__main__':

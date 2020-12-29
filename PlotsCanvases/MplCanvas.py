@@ -3,11 +3,8 @@ matplotlib.use('Qt5Agg')
 from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
-from abc import register
-from BaseCanvas import BaseCanvas
 
 
-@BaseCanvas.register
 class MplCanvas(FigureCanvasQTAgg):
 
     def __init__(self, parent=None, x=10, y=10, dpi=100):
@@ -22,7 +19,7 @@ class MplCanvas(FigureCanvasQTAgg):
         FigureCanvasQTAgg.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         FigureCanvasQTAgg.updateGeometry(self)
 
-    def update_canvas(self, x, y):
+    def upload_data(self, x, y):
         self.axes.cla()
         self.axes.plot(x, y)
         self.draw()
@@ -36,3 +33,8 @@ class MplCanvas(FigureCanvasQTAgg):
         self.axes.grid(self.grid)
         self.draw()
 
+    def set_grid(self):
+        pass
+
+    def set_line(self):
+        pass
