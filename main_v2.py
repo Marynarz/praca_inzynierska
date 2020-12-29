@@ -112,6 +112,7 @@ class MainWindow(QMainWindow):
         self.set_status('Lang set to '+lang)
 
     def open_file_window(self):
+        self.set_status('Open file')
         ret = app_defs.NO_ACTION
         file_to_open, _ = QFileDialog.getOpenFileName(self, 'Open file',
                                                       filter='TextFile (*.txt);;CSV (*.csv)')
@@ -141,8 +142,7 @@ class MainWindow(QMainWindow):
         y = [line[1] for line in data]
         self.log.write_log(app_defs.INFO_MSG, 'Data to plot: x:%s | y:%s' % (x, y))
         for key in self.canvases:
-            if key != app_defs.BOKEH:
-                self.canvases[key].upload_data(x=x, y=y)
+            self.canvases[key].upload_data(x=x, y=y)
 
 
 if __name__ == '__main__':
