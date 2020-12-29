@@ -146,7 +146,12 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    main = MainWindow()
-    main.show()
-    sys.exit(app.exec())
+    return_code = app_defs.REBOOT_APP
+
+    while return_code == app_defs.REBOOT_APP:
+        app = QApplication(sys.argv)
+        main = MainWindow()
+        main.show()
+        return_code = app.exec()
+
+    sys.exit(return_code)
