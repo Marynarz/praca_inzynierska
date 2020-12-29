@@ -1,3 +1,4 @@
+from defs import str_defs
 NOERROR = 0
 NO_ACTION = 1
 UNKNOWN_FILE_TYPE = 10
@@ -12,3 +13,12 @@ ERROR_MSG = 0x0000300
 
 # misc
 DEFAULT_PLOT = [(-100, 50), (-50, -50), (0, 0), (50, -50), (100, 50)]
+
+# Canvases namespace
+MATPLOTLIB = 'MPL'
+PYQTGRAPH = 'PQG'
+BOKEH = 'BKH'
+PLOTLY = 'PLT'
+
+CANVAS_NAME = {MATPLOTLIB: str_defs.MAT_PLOT_LIB, PYQTGRAPH: str_defs.QTGRAPH,
+               BOKEH: str_defs.BOKEH, PLOTLY: str_defs.PLOTLY}
