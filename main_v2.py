@@ -188,6 +188,9 @@ class MainWindow(QMainWindow):
         print(self.grid)
         self.grid = not self.grid
 
+        for key in self.canvases:
+            self.canvases[key].set_grid_(self.grid)
+
 
 
 if __name__ == '__main__':

@@ -28,14 +28,14 @@ class MplCanvas(FigureCanvasQTAgg):
         self.now_y = y
 
     def show(self):
-        self.grid = not self.grid
         self.axes.cla()
         self.axes.plot(self.now_x, self.now_y)
         self.axes.grid(self.grid)
         self.draw()
 
-    def set_grid(self):
-        pass
+    def set_grid_(self, state):
+        self.grid = state
+        self.show()
 
     def set_line(self):
         pass

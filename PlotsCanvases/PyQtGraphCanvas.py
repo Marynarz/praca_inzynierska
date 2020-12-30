@@ -16,8 +16,9 @@ class PyQtGraphCanvas(pg.PlotWidget):
         self.clear_plot()
         self.plot(self.x_pos, self.y_pos)
 
-    def set_grid(self):
-        pass
+    def set_grid_(self, state):
+        self.showGrid(x=state, y=state)
+        self.show_plot()
 
     def set_line(self):
         pass
