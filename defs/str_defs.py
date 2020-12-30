@@ -8,10 +8,10 @@ LANG_ENG = 'en'
 # menu defs
 MENU = '&Menu'
 NEW_APP = {LANG_PL: '&Nowy', LANG_ENG: '&New'}
-FILE_OPEN = {LANG_PL: '&Otworz plik', LANG_ENG: '&Open file'}
-EXIT_APP = {LANG_PL: '&Wyjscie', LANG_ENG: '&Exit'}
+FILE_OPEN = {LANG_PL: '&Otwórz plik', LANG_ENG: '&Open file'}
+EXIT_APP = {LANG_PL: '&Wyjście', LANG_ENG: '&Exit'}
 SETTINGS_MENU = {LANG_PL: '&Ustawienia', LANG_ENG: '&Settings'}
-LANG_CHANGE = {LANG_PL: '&Jezyk', LANG_ENG: '&Language'}
+LANG_CHANGE = {LANG_PL: '&Język', LANG_ENG: '&Language'}
 POLISH = {LANG_PL: '&Polski', LANG_ENG: '&Polish'}
 ENGLISH = {LANG_PL: '&Angielski', LANG_ENG: '&English'}
 
@@ -20,3 +20,7 @@ MAT_PLOT_LIB = 'Matplotlib'
 QTGRAPH = 'PyQtGraph'
 BOKEH = 'Bokeh'
 PLOTLY = 'PlotLy'
+
+# dock
+DOCK_TITLE = {LANG_PL: 'Narzędzia główne', LANG_ENG: 'Main tools'}
+GRID = {LANG_PL: 'Siatka', LANG_ENG: 'Grid'}

@@ -1,8 +1,8 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, QWidget, QAction, QFileDialog,\
-    QMessageBox, QVBoxLayout, QLabel
-from PyQt5.QtCore import QSettings
+    QMessageBox, QVBoxLayout, QLabel, QToolBar, QDockWidget, QCheckBox, QFormLayout
+from PyQt5.QtCore import QSettings, Qt
 from defs import str_defs, app_defs
 from gui_tools import logger, FileValidator
 from PlotsCanvases import MplCanvas, PyQtGraphCanvas, BokehCanvas, PlotLyCanvas
@@ -15,6 +15,7 @@ class MainWindow(QMainWindow):
         # Canvas container
         self.canvases = {app_defs.MATPLOTLIB: MplCanvas(parent=self), app_defs.PYQTGRAPH: PyQtGraphCanvas(),
                          app_defs.PLOTLY: PlotLyCanvas()}
+        self.grid = False
 
         try:
             self.log = logger.Logger('main_gui')
@@ -54,8 +55,11 @@ class MainWindow(QMainWindow):
         self._create_actions()
         self._create_menu()
         self._create_status_bar()
+        self._create_tool_bar()
+        self._create_dock()
 
     def _create_menu(self):
+        self.log.write_log(app_defs.INFO_MSG, 'Creating menus')
         self.menu = self.menuBar().addMenu(str_defs.MENU)
 
         # new
@@ -75,23 +79,17 @@ class MainWindow(QMainWindow):
 
         # internationalization
         self.langs = self.sets.addMenu(str_defs.LANG_CHANGE[self.language])
-
-        # pl
-        change_lang_action_pl = QAction(str_defs.POLISH[self.language], self)
-        self.langs.addAction(change_lang_action_pl)
-        change_lang_action_pl.triggered.connect(lambda x: self.set_lang(str_defs.LANG_PL))
-
-        # eng
-        change_lang_action_eng = QAction(str_defs.ENGLISH[self.language], self)
-        self.langs.addAction(change_lang_action_eng)
-        change_lang_action_eng.triggered.connect(lambda x: self.set_lang(str_defs.LANG_ENG))
+        self.langs.addAction(self.lang_pl_action)
+        self.langs.addAction(self.lang_eng_action)
 
     def _create_status_bar(self):
+        self.log.write_log(app_defs.INFO_MSG, 'Creating status bar')
         self.status = QStatusBar()
         self.status.showMessage('OK')
         self.setStatusBar(self.status)
 
     def _create_canvases_layouts(self):
+        self.log.write_log(app_defs.INFO_MSG, 'Creating canvases layouts')
         # setting layouts
         self.layouts = []
         for key in self.canvases:
@@ -112,6 +110,31 @@ class MainWindow(QMainWindow):
         self.exit_action.setShortcut('Ctrl+Q')
         self.exit_action.triggered.connect(self.close)
 
+        self.lang_pl_action = QAction(str_defs.POLISH[self.language], self)
+        self.lang_pl_action.triggered.connect(lambda: self.set_lang(str_defs.LANG_PL))
+
+        self.lang_eng_action = QAction(str_defs.ENGLISH[self.language], self)
+        self.lang_eng_action.triggered.connect(lambda: self.set_lang(str_defs.LANG_ENG))
+
+    def _create_tool_bar(self):
+        tools_toolbar = QToolBar('Tools')
+        tools_toolbar.addAction(self.file_open)
+        tools_toolbar.setFloatable(False)
+        tools_toolbar.setMovable(False)
+
+        self.addToolBar(tools_toolbar)
+
+    def _create_dock(self):
+        self.main_tools_dock = QDockWidget(str_defs.DOCK_TITLE[self.language], self)
+
+        set_grid_box = QCheckBox(str_defs.GRID[self.language], self)
+        set_grid_box.setChecked(self.grid)
+        set_grid_box.stateChanged.connect(self.set_grid)
+
+        self.main_tools_dock.setWidget(set_grid_box)
+
+        self.addDockWidget(Qt.RightDockWidgetArea, self.main_tools_dock)
+
     def set_status(self, status):
         self.status.showMessage(status, app_defs.STATUS_TIMEOUT)
 
@@ -124,6 +147,7 @@ class MainWindow(QMainWindow):
         pass
 
     def set_lang(self, lang):
+        self.log.write_log(app_defs.WARNING_MSG, 'Language set to: {0!s}. Manual action needed!'.format(lang))
         self.settings.setValue('lang', lang)
         self.set_status('Lang set to '+lang)
 
@@ -159,6 +183,11 @@ class MainWindow(QMainWindow):
         self.log.write_log(app_defs.INFO_MSG, 'Data to plot: x:%s | y:%s' % (x, y))
         for key in self.canvases:
             self.canvases[key].upload_data(x=x, y=y)
+
+    def set_grid(self):
+        print(self.grid)
+        self.grid = not self.grid
+
 
 
 if __name__ == '__main__':
