@@ -51,23 +51,22 @@ class MainWindow(QMainWindow):
             else:
                 y += 1
 
+        self._create_actions()
         self._create_menu()
         self._create_status_bar()
 
     def _create_menu(self):
         self.menu = self.menuBar().addMenu(str_defs.MENU)
-        # new
-        self.menu.addAction(str_defs.NEW_APP[self.language], self.reset)
 
-        file_open = QAction(str_defs.FILE_OPEN[self.language], self)
-        file_open.setShortcut('Ctrl+O')
-        self.menu.addAction(file_open)
-        file_open.triggered.connect(self.open_file_window)
+        # new
+        self.menu.addAction(self.reset_action)
+
+        # open file
+        self.menu.addAction(self.file_open)
 
         # exit section
         self.menu.addSeparator()
-        self.exit_action = QAction(str_defs.EXIT_APP[self.language], self)
-        self.exit_action.setShortcut('Ctrl+Q')
+
         self.menu.addAction(self.exit_action)
         self.exit_action.triggered.connect(self.close)
 
@@ -101,10 +100,27 @@ class MainWindow(QMainWindow):
             layout.addWidget(self.canvases[key])
             self.layouts.append(layout)
 
+    def _create_actions(self):
+        self.file_open = QAction(str_defs.FILE_OPEN[self.language], self)
+        self.file_open.setShortcut('Ctrl+O')
+        self.file_open.triggered.connect(self.open_file_window)
+
+        self.reset_action = QAction(str_defs.NEW_APP[self.language], self)
+        self.reset_action.triggered.connect(self.reset)
+
+        self.exit_action = QAction(str_defs.EXIT_APP[self.language], self)
+        self.exit_action.setShortcut('Ctrl+Q')
+        self.exit_action.triggered.connect(self.close)
+
     def set_status(self, status):
-        self.status.showMessage(status)
+        self.status.showMessage(status, app_defs.STATUS_TIMEOUT)
 
     def reset(self):
+        # self.exit_app(app_defs.REBOOT_APP)
+        pass
+
+    def exit_app(self, rc=0):
+        #QApplication.exit(return_code)
         pass
 
     def set_lang(self, lang):

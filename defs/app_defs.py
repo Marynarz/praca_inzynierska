@@ -14,6 +14,7 @@ ERROR_MSG = 0x0000300
 
 # misc
 DEFAULT_PLOT = [(-100, 50), (-50, -50), (0, 0), (50, -50), (100, 50)]
+STATUS_TIMEOUT = 10000
 
 # Canvases namespace
 MATPLOTLIB = 'MPL'
