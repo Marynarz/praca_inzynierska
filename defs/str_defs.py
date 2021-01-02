@@ -1,9 +1,10 @@
-# main window title
-MAIN_WINDOW_TITLE = {'pl': 'PRACA INZYNIERSKA', 'en': 'ENG PROJECT'}
-
 # internationalization
 LANG_PL = 'pl'
 LANG_ENG = 'en'
+
+# main window title
+MAIN_WINDOW_TITLE = {LANG_PL: 'PRACA INZYNIERSKA', LANG_ENG: 'ENG PROJECT'}
+SHOW_DATA_TITILE = {LANG_PL: 'Pokaż dane', LANG_ENG: 'Show data'}
 
 # menu defs
 MENU = '&Menu'
@@ -14,6 +15,8 @@ SETTINGS_MENU = {LANG_PL: '&Ustawienia', LANG_ENG: '&Settings'}
 LANG_CHANGE = {LANG_PL: '&Język', LANG_ENG: '&Language'}
 POLISH = {LANG_PL: '&Polski', LANG_ENG: '&Polish'}
 ENGLISH = {LANG_PL: '&Angielski', LANG_ENG: '&English'}
+
+SHOW_DATA = {LANG_PL:'Pokaż dane', LANG_ENG: 'Show data'}
 
 # components
 MAT_PLOT_LIB = 'Matplotlib'

@@ -7,7 +7,7 @@ from matplotlib.figure import Figure
 
 class MplCanvas(FigureCanvasQTAgg):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, grid=False):
         self.now_x = 10
         self.now_y = 10
         self.dpi = 100
@@ -15,17 +15,15 @@ class MplCanvas(FigureCanvasQTAgg):
         self.axes = figure.add_subplot(111)
         FigureCanvasQTAgg.__init__(self, figure)
         self.setParent(parent)
-        self.grid = False
+        self.grid = grid
 
         FigureCanvasQTAgg.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         FigureCanvasQTAgg.updateGeometry(self)
 
     def upload_data(self, x, y):
-        self.axes.cla()
-        self.axes.plot(x, y)
-        self.draw()
         self.now_x = x
         self.now_y = y
+        self.show()
 
     def show(self):
         self.axes.cla()

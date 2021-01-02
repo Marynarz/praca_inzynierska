@@ -1,10 +1,10 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, QWidget, QAction, QFileDialog,\
-    QMessageBox, QVBoxLayout, QLabel, QToolBar, QDockWidget, QCheckBox, QFormLayout
+    QMessageBox, QVBoxLayout, QLabel, QToolBar, QDockWidget, QCheckBox, QFormLayout, QToolButton
 from PyQt5.QtCore import QSettings, Qt
 from defs import str_defs, app_defs
-from gui_tools import logger, FileValidator
+from gui_tools import logger, FileValidator, data_viewer
 from PlotsCanvases import MplCanvas, PyQtGraphCanvas, BokehCanvas, PlotLyCanvas
 
 
@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
 
         # Canvas container
-        self.canvases = {app_defs.MATPLOTLIB: MplCanvas(parent=self), app_defs.PYQTGRAPH: PyQtGraphCanvas(),
+        self.canvases = {app_defs.MATPLOTLIB: MplCanvas(parent=self, grid=False), app_defs.PYQTGRAPH: PyQtGraphCanvas(),
                          app_defs.PLOTLY: PlotLyCanvas()}
         self.grid = False
 
@@ -32,7 +32,6 @@ class MainWindow(QMainWindow):
         self.log.write_log(app_defs.INFO_MSG, 'Hello main gui\t--\tV2.00')
         self.log.write_log(app_defs.ERROR_MSG, 'lang: %s, type: %s' % (self.language, type(self.language)))
         self.setWindowTitle(str_defs.MAIN_WINDOW_TITLE[self.language])
-        self.load_and_plot_data(app_defs.DEFAULT_PLOT)
 
         self._create_canvases_layouts()
 
@@ -57,6 +56,9 @@ class MainWindow(QMainWindow):
         self._create_status_bar()
         self._create_tool_bar()
         self._create_dock()
+        self.data_viewer = data_viewer.DataViewer(parent=self)
+        self.data_viewer.set_data(app_defs.DEFAULT_PLOT)
+        self.load_and_plot_data()
 
     def _create_menu(self):
         self.log.write_log(app_defs.INFO_MSG, 'Creating menus')
@@ -85,7 +87,7 @@ class MainWindow(QMainWindow):
     def _create_status_bar(self):
         self.log.write_log(app_defs.INFO_MSG, 'Creating status bar')
         self.status = QStatusBar()
-        self.status.showMessage('OK')
+        self.set_status('OK')
         self.setStatusBar(self.status)
 
     def _create_canvases_layouts(self):
@@ -116,6 +118,9 @@ class MainWindow(QMainWindow):
         self.lang_eng_action = QAction(str_defs.ENGLISH[self.language], self)
         self.lang_eng_action.triggered.connect(lambda: self.set_lang(str_defs.LANG_ENG))
 
+        self.show_data_action = QAction(str_defs.SHOW_DATA[self.language], self)
+        self.show_data_action.triggered.connect(self.show_data_app)
+
     def _create_tool_bar(self):
         tools_toolbar = QToolBar('Tools')
         tools_toolbar.addAction(self.file_open)
@@ -126,14 +131,26 @@ class MainWindow(QMainWindow):
 
     def _create_dock(self):
         self.main_tools_dock = QDockWidget(str_defs.DOCK_TITLE[self.language], self)
+        self.docket_widget = QWidget()
+        dock_layout = QFormLayout()
 
         set_grid_box = QCheckBox(str_defs.GRID[self.language], self)
         set_grid_box.setChecked(self.grid)
         set_grid_box.stateChanged.connect(self.set_grid)
 
-        self.main_tools_dock.setWidget(set_grid_box)
+        show_data_btn = QToolButton()
+        show_data_btn.setDefaultAction(self.show_data_action)
+
+        self.docket_widget.setLayout(dock_layout)
+        dock_layout.addWidget(set_grid_box)
+        dock_layout.addWidget(show_data_btn)
+
+        self.main_tools_dock.setWidget(self.docket_widget)
 
         self.addDockWidget(Qt.RightDockWidgetArea, self.main_tools_dock)
+
+    def show_data_app(self):
+        self.data_viewer.show()
 
     def set_status(self, status):
         self.status.showMessage(status, app_defs.STATUS_TIMEOUT)
@@ -174,9 +191,11 @@ class MainWindow(QMainWindow):
                                         QMessageBox.Ok, QMessageBox.Ok)
         elif ret == app_defs.NOERROR:
             self.log.write_log(app_defs.INFO_MSG, 'File validated successfully, proceed to load and plot data.')
-            self.load_and_plot_data(file_points.get_values())
+            self.data_viewer.set_data(file_points.get_values())
+            self.load_and_plot_data()
 
-    def load_and_plot_data(self, data):
+    def load_and_plot_data(self):
+        data = self.data_viewer.get_data()
         self.log.write_log(app_defs.INFO_MSG, 'Load and plot data')
         x = [line[0] for line in data]
         y = [line[1] for line in data]
@@ -185,12 +204,10 @@ class MainWindow(QMainWindow):
             self.canvases[key].upload_data(x=x, y=y)
 
     def set_grid(self):
-        print(self.grid)
         self.grid = not self.grid
 
         for key in self.canvases:
             self.canvases[key].set_grid_(self.grid)
-
 
 
 if __name__ == '__main__':
