@@ -23,6 +23,8 @@ class PyQtGraphCanvas(pg.PlotWidget):
         elif self.plot_type == PlotTypes.BAR_CHART:
             bar_chart = pg.BarGraphItem(x=self.x_pos, height=self.y_pos, width=0.6, brush='r')
             self.addItem(bar_chart)
+        elif self.plot_type == PlotTypes.PIE_CHART:
+            pass
 
     def set_grid_(self, state):
         self.showGrid(x=state, y=state)

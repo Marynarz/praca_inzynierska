@@ -33,6 +33,9 @@ class MplCanvas(FigureCanvasQTAgg):
             self.axes.plot(self.now_x, self.now_y)
         elif self.plot_type == PlotTypes.BAR_CHART:
             self.axes.bar(self.now_x, self.now_y)
+        elif self.plot_type == PlotTypes.PIE_CHART:
+            self._check_validate_y()
+            self.axes.pie(x=self.pie_data, labels=range(len(self.pie_data)))
         self.axes.grid(self.grid)
         self.draw()
 
@@ -46,3 +49,6 @@ class MplCanvas(FigureCanvasQTAgg):
     def set_plot_type(self, type_no):
         self.plot_type = type_no
         self.show()
+
+    def _check_validate_y(self):
+        self.pie_data = [y for y in self.now_y if y > 0]
