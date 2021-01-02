@@ -211,7 +211,7 @@ class MainWindow(QMainWindow):
         for key in self.canvases:
             self.canvases[key].set_grid_(self.grid)
 
-        self.set_status(str_defs.GRID_SET[self.language])
+        self.set_status(str_defs.GRID_SET[self.language].format(self.grid))
 
 
 if __name__ == '__main__':
