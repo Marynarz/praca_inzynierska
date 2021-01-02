@@ -196,13 +196,8 @@ class MainWindow(QMainWindow):
             self.load_and_plot_data()
 
     def load_and_plot_data(self):
-        data = self.data_viewer.get_data()
-        self.log.write_log(app_defs.INFO_MSG, 'Load and plot data')
-        x = [line[0] for line in data]
-        y = [line[1] for line in data]
-        self.log.write_log(app_defs.INFO_MSG, 'Data to plot: x:%s | y:%s' % (x, y))
         for key in self.canvases:
-            self.canvases[key].upload_data(x=x, y=y)
+            self.canvases[key].upload_data(self.data_viewer.get_data())
 
     def set_grid(self):
         self.log.write_log(app_defs.INFO_MSG, 'grid set to {0}'.format(not self.grid))

@@ -7,9 +7,11 @@ class PyQtGraphCanvas(pg.PlotWidget):
         self.x_pos = 0
         self.y_pos = 0
 
-    def upload_data(self, x, y):
-        self.x_pos = x
-        self.y_pos = y
+    def upload_data(self, data):
+        self.x_pos = (line[0] for line in data)
+        self.x_pos = list(self.x_pos)
+        self.y_pos = (line[1] for line in data)
+        self.y_pos = list(self.y_pos)
         self.show_plot()
 
     def show_plot(self):

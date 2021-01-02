@@ -16,8 +16,8 @@ class PlotLyCanvas(QWebEngineView):
                              '<body>'
         self.raw_html_tail = '</body></html>'
 
-    def upload_data(self, x, y):
-        self.data = pd.DataFrame(y, index=x)
+    def upload_data(self, data):
+        self.data = pd.DataFrame(data[1], index=data[0])
         self.fig = px.line(self.data)
         self.show_plot()
 
