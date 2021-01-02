@@ -25,7 +25,7 @@ class PlotLyCanvas(QWebEngineView):
         elif self.plot_type == PlotTypes.BAR_CHART:
             self.fig = px.bar(self.data, x=0, y=1)
         elif self.plot_type == PlotTypes.PIE_CHART:
-            self.fig = px.pie(self.data, values=0)
+            self.fig = px.pie(self.data, values=1)
         self.show_plot()
 
     def show_plot(self):
