@@ -3,6 +3,7 @@ matplotlib.use('Qt5Agg')
 from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+from defs.app_defs import PlotTypes
 
 
 class MplCanvas(FigureCanvasQTAgg):
@@ -10,6 +11,7 @@ class MplCanvas(FigureCanvasQTAgg):
     def __init__(self, parent=None, grid=False):
         self.now_x = []
         self.now_y = []
+        self.plot_type = PlotTypes.D2_CHART
         self.dpi = 100
         figure = Figure(figsize=(10, 10), dpi=self.dpi)
         self.axes = figure.add_subplot(111)
@@ -27,7 +29,10 @@ class MplCanvas(FigureCanvasQTAgg):
 
     def show(self):
         self.axes.cla()
-        self.axes.plot(self.now_x, self.now_y)
+        if self.plot_type == PlotTypes.D2_CHART:
+            self.axes.plot(self.now_x, self.now_y)
+        elif self.plot_type == PlotTypes.BAR_CHART:
+            self.axes.bar(self.now_x, self.now_y)
         self.axes.grid(self.grid)
         self.draw()
 
@@ -37,3 +42,7 @@ class MplCanvas(FigureCanvasQTAgg):
 
     def set_line(self):
         pass
+
+    def set_plot_type(self, type_no):
+        self.plot_type = type_no
+        self.show()

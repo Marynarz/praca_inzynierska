@@ -1,7 +1,7 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, QWidget, QAction, QFileDialog,\
-    QMessageBox, QVBoxLayout, QLabel, QToolBar, QDockWidget, QCheckBox, QFormLayout, QToolButton
+    QMessageBox, QVBoxLayout, QLabel, QToolBar, QDockWidget, QCheckBox, QFormLayout, QToolButton, QComboBox
 from PyQt5.QtCore import QSettings, Qt
 from defs import str_defs, app_defs
 from gui_tools import logger, FileValidator, data_viewer
@@ -142,9 +142,14 @@ class MainWindow(QMainWindow):
         show_data_btn = QToolButton()
         show_data_btn.setDefaultAction(self.show_data_action)
 
+        plot_type_box = QComboBox()
+        plot_type_box.addItems(str_defs.PLOT_TYPES[self.language])
+        plot_type_box.currentIndexChanged.connect(self.set_plot_type)
+
         self.docket_widget.setLayout(dock_layout)
         dock_layout.addWidget(set_grid_box)
         dock_layout.addWidget(show_data_btn)
+        dock_layout.addWidget(plot_type_box)
 
         self.main_tools_dock.setWidget(self.docket_widget)
 
@@ -207,6 +212,10 @@ class MainWindow(QMainWindow):
             self.canvases[key].set_grid_(self.grid)
 
         self.set_status(str_defs.GRID_SET[self.language].format(self.grid))
+
+    def set_plot_type(self, plot_type):
+        for key in self.canvases:
+            self.canvases[key].set_plot_type(plot_type + 1)
 
 
 if __name__ == '__main__':

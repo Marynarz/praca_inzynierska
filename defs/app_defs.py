@@ -1,4 +1,5 @@
 from defs import str_defs
+from enum import IntEnum
 NOERROR = 0
 NO_ACTION = 1
 UNKNOWN_FILE_TYPE = 10
@@ -24,3 +25,10 @@ PLOTLY = 'PLT'
 
 CANVAS_NAME = {MATPLOTLIB: str_defs.MAT_PLOT_LIB, PYQTGRAPH: str_defs.QTGRAPH,
                BOKEH: str_defs.BOKEH, PLOTLY: str_defs.PLOTLY}
+
+
+class PlotTypes(IntEnum):
+    D2_CHART = 1     # 2D - chart
+    D3_CHART = 2     # 3D chart
+    PIE_CHART = 3    # Pie chart
+    BAR_CHART = 4    # Bar chart

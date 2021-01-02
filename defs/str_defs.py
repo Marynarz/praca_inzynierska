@@ -27,8 +27,10 @@ PLOTLY = 'PlotLy'
 # dock
 DOCK_TITLE = {LANG_PL: 'Narzędzia główne', LANG_ENG: 'Main tools'}
 GRID = {LANG_PL: 'Siatka', LANG_ENG: 'Grid'}
+PLOT_TYPES = {LANG_PL: ('Wykres 2D', 'Wykres 3D', 'Wykres kołowy', 'Wykres słupkowy'),
+              LANG_ENG: ('2D chart', '3D chart', 'Pie chart', 'Bar chart')}
 
-# statuese
+# statuses
 OK = 'Ok'
 NOK = 'NOk'
 GRID_SET = {LANG_PL: 'Siatka ustawiona do {0}', LANG_ENG: 'Grid set to {0}'}

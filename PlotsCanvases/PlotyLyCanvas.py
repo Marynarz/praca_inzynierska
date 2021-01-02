@@ -3,11 +3,13 @@ import plotly.offline as po
 import plotly.graph_objs as pgo
 import pandas as pd
 from PyQt5.QtWebEngineWidgets import QWebEngineView
+from defs.app_defs import PlotTypes
 
 
 class PlotLyCanvas(QWebEngineView):
     def __init__(self):
         super().__init__()
+        self.plot_type = PlotTypes.D2_CHART
         self.data = pd.DataFrame((0, ), index=(0, ))
         self.fig = px.line(self.data)
 
@@ -17,8 +19,11 @@ class PlotLyCanvas(QWebEngineView):
         self.raw_html_tail = '</body></html>'
 
     def upload_data(self, data):
-        self.data = pd.DataFrame(data[1], index=data[0])
-        self.fig = px.line(self.data)
+        self.data = pd.DataFrame(data)
+        if self.plot_type == PlotTypes.D2_CHART:
+            self.fig = px.line(self.data, x=0, y=1)
+        elif self.plot_type == PlotTypes.BAR_CHART:
+            self.fig = px.bar(self.data, x=0, y=1)
         self.show_plot()
 
     def show_plot(self):
@@ -30,3 +35,7 @@ class PlotLyCanvas(QWebEngineView):
 
     def set_grid_(self, state):
         pass
+
+    def set_plot_type(self, type_no):
+        self.plot_type = type_no
+        self.upload_data(self.data)
