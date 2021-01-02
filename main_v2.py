@@ -13,7 +13,8 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
 
         # Canvas container
-        self.canvases = {app_defs.MATPLOTLIB: MplCanvas(parent=self, grid=False), app_defs.PYQTGRAPH: PyQtGraphCanvas(),
+        self.canvases = {app_defs.MATPLOTLIB: MplCanvas(parent=self, grid=False),
+                         app_defs.PYQTGRAPH: PyQtGraphCanvas(),
                          app_defs.PLOTLY: PlotLyCanvas()}
         self.grid = False
 
@@ -204,10 +205,13 @@ class MainWindow(QMainWindow):
             self.canvases[key].upload_data(x=x, y=y)
 
     def set_grid(self):
+        self.log.write_log(app_defs.INFO_MSG, 'grid set to {0}'.format(not self.grid))
         self.grid = not self.grid
 
         for key in self.canvases:
             self.canvases[key].set_grid_(self.grid)
+
+        self.set_status(str_defs.GRID_SET[self.language])
 
 
 if __name__ == '__main__':

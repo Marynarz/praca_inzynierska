@@ -27,3 +27,8 @@ PLOTLY = 'PlotLy'
 # dock
 DOCK_TITLE = {LANG_PL: 'Narzędzia główne', LANG_ENG: 'Main tools'}
 GRID = {LANG_PL: 'Siatka', LANG_ENG: 'Grid'}
+
+# statuese
+OK = 'Ok'
+NOK = 'NOk'
+GRID_SET = {LANG_PL: 'Siatka ustawiona do {0}', LANG_ENG: 'Grid set to {0}'}

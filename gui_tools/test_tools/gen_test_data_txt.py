@@ -13,7 +13,7 @@ def gen_data(min_val=-10, max_val=10, lines_number=10, file_name='test_data.txt'
 
 
 ##
-# @brief generate randoma test data
+# @brief generate random test data
 #
 # @params:
 #     min_val
