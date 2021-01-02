@@ -16,6 +16,7 @@ class FileValidator(object):
 
     def file_to_validate(self, source_file):
         fname = self.FNAME_PATTERN % 'file_to_validate'
+        self.clear_values()
 
         filetype = source_file.split('.')[-1]
         try:
@@ -64,3 +65,6 @@ class FileValidator(object):
 
     def get_values(self):
         return self.values
+
+    def clear_values(self):
+        self.values.clear()

@@ -36,6 +36,7 @@ class DataViewer(QMainWindow):
         self.setCentralWidget(self.main_view)
 
     def set_data(self, data):
+        self.data = []
         self.data = data
         self.sort_values()
         self.show_data()
