@@ -1,4 +1,5 @@
 from defs import app_defs
+import pandas as pd
 import operator
 from gui_tools import logger
 import csv
@@ -7,6 +8,7 @@ import csv
 class FileValidator(object):
     # value = (x, y)
     values = []
+    values_pd = None
     FNAME_PATTERN = 'FileValidator.%s'
     validators_dict = {'txt': 'self.validate_txt_file', 'csv': 'self.validate_csv_file'}
 
@@ -45,8 +47,11 @@ class FileValidator(object):
             self.log.write_log(app_defs.ERROR_MSG, ' %s: Exception when validating file. {error=%s}' % (fname, e))
             raise e
 
+        self.values_pd = pd.read_csv(source_file, sep=" ", header=None)
+
         if sort:
             self.sort_values()
+            self.sort_values_pd()
 
     def validate_csv_file(self, source_file, sort=True):
         fname = self.FNAME_PATTERN % 'validate_csv_file'
@@ -57,14 +62,36 @@ class FileValidator(object):
             for row in reader:
                 self.values.append((float(row[0]), float(row[1])))
 
+        self.values_pd = pd.read_csv(source_file)
+
         if sort:
             self.sort_values()
+            self.sort_values_pd()
+
+    def validate_json_file(self, source_file, sort=True):
+        fname = self.FNAME_PATTERN % 'validate_json_file'
+        self.log.write_log(app_defs.INFO_MSG, '%s: json file chosen, validate' % fname)
+
+        self.values_pd = pd.read_json(source_file)
+
+        if sort:
+            self.sort_values_pd()
 
     def sort_values(self):
         self.values.sort(key=operator.itemgetter(0))
+
+    def sort_values_pd(self):
+        fname = self.FNAME_PATTERN % 'sort_values'
+        try:
+            self.values_pd.sort_values(by=self.values_pd.columns[0], inplace=True)
+        except Exception as e:
+            self.log.write_log(app_defs.WARNING_MSG, '%s: unable to sort values, excpetion = {%s}' % (fname, e))
 
     def get_values(self):
         return self.values
 
     def clear_values(self):
+        fname = self.FNAME_PATTERN % 'clear_values'
+        self.log.write_log(app_defs.INFO_MSG, '%s: clear values' % fname)
         self.values.clear()
+        self.values_pd = []
