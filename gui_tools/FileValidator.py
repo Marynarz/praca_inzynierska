@@ -47,7 +47,17 @@ class FileValidator(object):
             self.log.write_log(app_defs.ERROR_MSG, ' %s: Exception when validating file. {error=%s}' % (fname, e))
             raise e
 
-        self.values_pd = pd.read_csv(source_file, sep=" ", header=None)
+        header = None
+        with open(source_file, 'r') as f:
+            first_line = f.readline()
+            try:
+                first_line = first_line.split(' ')
+                float(first_line[0])
+            except ValueError as e:
+                self.log.write_log(app_defs.INFO_MSG, '%s: file with header. header: %s' % (fname, first_line))
+                header = 0
+
+        self.values_pd = pd.read_csv(source_file, sep=" ", header=header)
 
         if sort:
             self.sort_values()
@@ -62,7 +72,17 @@ class FileValidator(object):
             for row in reader:
                 self.values.append((float(row[0]), float(row[1])))
 
-        self.values_pd = pd.read_csv(source_file)
+        header = None
+        with open(source_file, 'r') as f:
+            first_line =f.readline()
+            try:
+                first_line = first_line.split(',')
+                float(first_line[0])
+            except ValueError as e:
+                self.log.write_log(app_defs.INFO_MSG, '%s: file with header. header: %s' % (fname, first_line))
+                header = 0
+
+        self.values_pd = pd.read_csv(source_file, header=header)
 
         if sort:
             self.sort_values()
