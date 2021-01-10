@@ -7,11 +7,12 @@ from defs import str_defs, app_defs
 from gui_tools import logger, FileValidator, data_viewer
 from PlotsCanvases import MplCanvas, PyQtGraphCanvas, BokehCanvas, PlotLyCanvas
 
+import pandas as pd
+
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-
         # Canvas container
         self.canvases = {app_defs.MATPLOTLIB: MplCanvas(parent=self, grid=False),
                          app_defs.PYQTGRAPH: PyQtGraphCanvas(),
@@ -58,7 +59,7 @@ class MainWindow(QMainWindow):
         self._create_tool_bar()
         self._create_dock()
         self.data_viewer = data_viewer.DataViewer(parent=self)
-        self.data_viewer.set_data(app_defs.DEFAULT_PLOT)
+        self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
         self.load_and_plot_data()
 
     def _create_menu(self):

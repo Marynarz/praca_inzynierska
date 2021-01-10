@@ -19,13 +19,13 @@ class PlotLyCanvas(QWebEngineView):
         self.raw_html_tail = '</body></html>'
 
     def upload_data(self, data):
-        self.data = pd.DataFrame(data)
+        self.data = data
         if self.plot_type == PlotTypes.D2_CHART:
-            self.fig = px.line(self.data, x=0, y=1)
+            self.fig = px.line(self.data)
         elif self.plot_type == PlotTypes.BAR_CHART:
-            self.fig = px.bar(self.data, x=0, y=1)
+            self.fig = px.bar(self.data)
         elif self.plot_type == PlotTypes.PIE_CHART:
-            self.fig = px.pie(self.data, values=1)
+            self.fig = px.pie(self.data)
         self.show_plot()
 
     def show_plot(self):

@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from defs.app_defs import PlotTypes
-
+import pandas as pd
 
 class MplCanvas(FigureCanvasQTAgg):
 
@@ -23,8 +23,18 @@ class MplCanvas(FigureCanvasQTAgg):
         FigureCanvasQTAgg.updateGeometry(self)
 
     def upload_data(self, data):
-        self.now_x = [line[0] for line in data]
-        self.now_y = [line[1] for line in data]
+        if type(data) != pd.DataFrame:
+            print('error')
+            print(data)
+            data = pd.DataFrame(data)
+        columns = data.columns.tolist()
+
+        if len(columns) > 1:
+            self.now_y = columns[0]
+            self.now_x = columns[1]
+        else:
+            self.now_y = data.index.tolist()
+            self.now_x = data[columns[0]].tolist()
         self.show()
 
     def show(self):

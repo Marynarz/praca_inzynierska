@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QTableView
 from PyQt5.QtCore import QAbstractTableModel, Qt
 import operator
 from defs import str_defs
+import pandas as pd
 
 
 class TableModel(QAbstractTableModel):
@@ -14,17 +15,17 @@ class TableModel(QAbstractTableModel):
             return self._data[index.row()][index.column()]
 
     def rowCount(self, index):
-        return len(self._data)
+        return len(self._data.values)
 
     def columnCount(self, index):
-        return len(self._data[0])
+        return self._data.columns.size
 
 
 class DataViewer(QMainWindow):
     def __init__(self, parent=None, data=None):
         super().__init__(parent)
         if not data:
-            data = [(0, 0), ]
+            data = pd.DataFrame((0, 0))
         self.data = data
         self.language = self.parent().language
         self.setWindowTitle(str_defs.SHOW_DATA_TITILE[self.language])
@@ -38,7 +39,6 @@ class DataViewer(QMainWindow):
     def set_data(self, data):
         self.data = []
         self.data = data
-        self.sort_values()
         self.show_data()
 
     def get_data(self):

@@ -1,5 +1,6 @@
 import pyqtgraph as pg
 from defs.app_defs import PlotTypes
+import pandas as pd
 
 
 class PyQtGraphCanvas(pg.PlotWidget):
@@ -10,10 +11,19 @@ class PyQtGraphCanvas(pg.PlotWidget):
         self.y_pos = 0
 
     def upload_data(self, data):
-        self.x_pos = (line[0] for line in data)
-        self.x_pos = list(self.x_pos)
-        self.y_pos = (line[1] for line in data)
-        self.y_pos = list(self.y_pos)
+        if type(data) != pd.DataFrame:
+            print('error')
+            print(data)
+            data = pd.DataFrame(data)
+        columns = data.columns.tolist()
+
+        if len(columns) > 1:
+            self.y_pos = data[columns[0]].tolist()
+            self.x_pos = data[columns[1]].tolist()
+        else:
+            self.y_pos = data.index.tolist()
+            self.x_pos = data[columns[0]].tolist()
+
         self.show_plot()
 
     def show_plot(self):
