@@ -11,7 +11,6 @@ class PyQtGraphCanvas(pg.PlotWidget):
         self.y_pos = 0
 
     def upload_data(self, data):
-        print(data)
         columns = data.columns.tolist()
 
         if len(columns) > 1:

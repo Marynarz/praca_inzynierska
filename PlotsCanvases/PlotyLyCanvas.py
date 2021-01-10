@@ -20,12 +20,20 @@ class PlotLyCanvas(QWebEngineView):
 
     def upload_data(self, data):
         self.data = data
+
+        if len(self.data.columns) > 1:
+            x = self.data.columns[0]
+            y = self.data.columns[1]
+        else:
+            x = self.data.index.name
+            y = self.data.columns[0]
+
         if self.plot_type == PlotTypes.D2_CHART:
-            self.fig = px.line(self.data)
+            self.fig = px.line(self.data, y=y, x=x)
         elif self.plot_type == PlotTypes.BAR_CHART:
-            self.fig = px.bar(self.data)
+            self.fig = px.bar(self.data, y=y, x=x)
         elif self.plot_type == PlotTypes.PIE_CHART:
-            self.fig = px.pie(self.data)
+            self.fig = px.pie(self.data, values=x)
         self.show_plot()
 
     def show_plot(self):
