@@ -23,15 +23,11 @@ class MplCanvas(FigureCanvasQTAgg):
         FigureCanvasQTAgg.updateGeometry(self)
 
     def upload_data(self, data):
-        if type(data) != pd.DataFrame:
-            print('error')
-            print(data)
-            data = pd.DataFrame(data)
         columns = data.columns.tolist()
 
         if len(columns) > 1:
-            self.now_y = columns[0]
-            self.now_x = columns[1]
+            self.now_y = data[columns[0]].tolist()
+            self.now_x = data[columns[1]].tolist()
         else:
             self.now_y = data.index.tolist()
             self.now_x = data[columns[0]].tolist()
@@ -40,9 +36,9 @@ class MplCanvas(FigureCanvasQTAgg):
     def show(self):
         self.axes.cla()
         if self.plot_type == PlotTypes.D2_CHART:
-            self.axes.plot(self.now_x, self.now_y)
+            self.axes.plot(self.now_y, self.now_x)
         elif self.plot_type == PlotTypes.BAR_CHART:
-            self.axes.bar(self.now_x, self.now_y)
+            self.axes.bar(self.now_y, self.now_x)
         elif self.plot_type == PlotTypes.PIE_CHART:
             self._check_validate_y()
             self.axes.pie(x=self.pie_data, labels=range(len(self.pie_data)))

@@ -11,10 +11,7 @@ class PyQtGraphCanvas(pg.PlotWidget):
         self.y_pos = 0
 
     def upload_data(self, data):
-        if type(data) != pd.DataFrame:
-            print('error')
-            print(data)
-            data = pd.DataFrame(data)
+        print(data)
         columns = data.columns.tolist()
 
         if len(columns) > 1:
@@ -29,9 +26,9 @@ class PyQtGraphCanvas(pg.PlotWidget):
     def show_plot(self):
         self.clear_plot()
         if self.plot_type == PlotTypes.D2_CHART:
-            self.plot(self.x_pos, self.y_pos)
+            self.plot(self.y_pos, self.x_pos)
         elif self.plot_type == PlotTypes.BAR_CHART:
-            bar_chart = pg.BarGraphItem(x=self.x_pos, height=self.y_pos, width=0.6, brush='r')
+            bar_chart = pg.BarGraphItem(x=self.y_pos, height=self.x_pos, width=0.6, brush='r')
             self.addItem(bar_chart)
         elif self.plot_type == PlotTypes.PIE_CHART:
             pass
