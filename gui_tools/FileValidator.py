@@ -1,8 +1,6 @@
 from defs import app_defs
 import pandas as pd
-import operator
 from gui_tools import logger
-import csv
 
 
 class FileValidator(object):
@@ -10,9 +8,9 @@ class FileValidator(object):
     FNAME_PATTERN = 'FileValidator.%s'
     validators_dict = {'txt': 'self.validate_txt_file', 'csv': 'self.validate_csv_file'}
 
-    def __init__(self, entry_point):
+    def __init__(self, entry_point, append=False):
         self.entry_point = entry_point
-        self.log = logger.Logger('FileValidator')
+        self.log = logger.Logger('FileValidator', append=append)
 
     def file_to_validate(self, source_file):
         fname = self.FNAME_PATTERN % 'file_to_validate'
@@ -82,15 +80,22 @@ class FileValidator(object):
         fname = self.FNAME_PATTERN % 'sort_values'
         try:
             self.values_pd.sort_values(by=self.values_pd.columns[0], inplace=True)
+            self.log.write_log(app_defs.INFO_MSG, '%s: all values in dataframe '
+                                                  'are sorted by {%s}' % (fname, self.values_pd.columns[0]))
         except Exception as e:
             self.log.write_log(app_defs.WARNING_MSG, '%s: unable to sort values, excpetion = {%s}' % (fname, e))
 
     def get_values(self):
-        print(type(self.values_pd))
-        print(self.values_pd)
+        fname = self.FNAME_PATTERN % 'get_values'
+        self.log.write_log(app_defs.INFO_MSG, '%s: returning pandas data frame' % fname)
         return self.values_pd
 
     def clear_values(self):
         fname = self.FNAME_PATTERN % 'clear_values'
         self.log.write_log(app_defs.INFO_MSG, '%s: clear values' % fname)
-        self.values_pd = []
+        self.values_pd = self.values_pd[0:0]
+        self.log.write_log(app_defs.INFO_MSG, '%s: check if empty: %s' % (fname, self.values_pd.empty))
+
+    @staticmethod
+    def get_append():
+        return True

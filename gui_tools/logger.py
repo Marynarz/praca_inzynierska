@@ -4,19 +4,16 @@ import os
 
 
 class Logger(object):
-    def __init__(self, log_point):
+    def __init__(self, log_point, append=False):
         self.file_name = None
         path = 'log'
-        attempt_cnt = 0
-        while not os.path.isdir(path) and attempt_cnt != app_defs.LOG_DIR_MAX_ATTEMPT:
-            attempt_cnt += 1
-            path = '../' + path
-
-        if attempt_cnt == app_defs.LOG_DIR_MAX_ATTEMPT:
-            raise NotADirectoryError('Unable to find log directory')
+        if not os.path.isdir(path):
+            os.mkdir(path)
 
         self.file_name = path + '/' + log_point + '.txt'
-        with open(self.file_name, 'w+') as f:
+        self.append = 'a' if append else 'w+'
+
+        with open(self.file_name, self.append) as f:
             f.write('Start logging at: ' + str(time.time()) + ' from: ' + log_point + '\n')
 
     def write_log(self, msg_code, msg):

@@ -19,11 +19,9 @@ class MainWindow(QMainWindow):
                          app_defs.PLOTLY: PlotLyCanvas()}
         self.grid = False
 
-        try:
-            self.log = logger.Logger('main_gui')
-        except Exception as e:
-            print(e)
-            sys.exit(0)
+        self.log = logger.Logger('main_gui')
+        self.re_write_log = False
+
         self.settings = QSettings('wnie', 'praca_inzynierska')
         if self.settings.contains('lang'):
             self.language = self.settings.value('lang')
@@ -182,7 +180,7 @@ class MainWindow(QMainWindow):
                                                       filter='TextFile (*.txt);;CSV (*.csv)')
         self.log.write_log(app_defs.INFO_MSG, 'Selected file: ' + str(file_to_open))
         if file_to_open:
-            file_points = FileValidator.FileValidator('Main')
+            file_points = FileValidator.FileValidator('Main', append=self.re_write_log)
             ret = file_points.file_to_validate(file_to_open)
 
         if ret != app_defs.NOERROR:
@@ -200,6 +198,9 @@ class MainWindow(QMainWindow):
             self.log.write_log(app_defs.INFO_MSG, 'File validated successfully, proceed to load and plot data.')
             self.data_viewer.set_data(file_points.get_values())
             self.load_and_plot_data()
+
+        if not self.re_write_log:
+            self.re_write_log = True
 
     def load_and_plot_data(self):
         for key in self.canvases:
