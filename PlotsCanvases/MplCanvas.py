@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from defs.app_defs import PlotTypes
-import pandas as pd
+
 
 class MplCanvas(FigureCanvasQTAgg):
 

@@ -12,13 +12,19 @@ class TableModel(QAbstractTableModel):
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
-            return self._data[index.row()][index.column()]
+            return str(self._data.iloc[index.row(), index.column()])
+        return None
 
     def rowCount(self, index):
-        return len(self._data.values)
+        return self._data.shape[0]
 
     def columnCount(self, index):
-        return self._data.columns.size
+        return self._data.shape[1]
+
+    def headerData(self, col, orientation, role):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return self._data.columns[col]
+        return None
 
 
 class DataViewer(QMainWindow):
