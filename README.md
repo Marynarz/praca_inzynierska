@@ -38,10 +38,6 @@ W celu odpalenia programu należy zainstalować:
     pip install pyqtgraph
     pip install pandas
     ```
-* **U**pewnij się czy folder z programe posiada podfolder `log`
-	```
-    mkdir log
-    ```
 * **E**njoy
     ```
     python3 main_v2.py
