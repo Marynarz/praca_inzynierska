@@ -124,6 +124,7 @@ class MainWindow(QMainWindow):
     def _create_tool_bar(self):
         tools_toolbar = QToolBar('Tools')
         tools_toolbar.addAction(self.file_open)
+        tools_toolbar.addAction(self.show_data_action)
         tools_toolbar.setFloatable(False)
         tools_toolbar.setMovable(False)
 
