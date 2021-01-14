@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QTableView, QDockWidget, QWidget, QFormLayout, QComboBox,\
     QCheckBox, QTabWidget, QVBoxLayout, QPushButton
 from PyQt5.QtCore import QAbstractTableModel, Qt
-import operator
 from defs import str_defs, app_defs
 import pandas as pd
 
@@ -32,6 +31,8 @@ class TableModel(QAbstractTableModel):
 
 
 class DataViewer(QMainWindow):
+    FNAME_TEMPLATE = 'DataViewer.{0!s}'
+
     def __init__(self, parent=None, data=None):
         super().__init__(parent)
         self.par_ = parent
@@ -45,6 +46,8 @@ class DataViewer(QMainWindow):
         self._create_dock()
         self.show_data()
         self.data = pd.DataFrame((0, 0))
+        self.parent().log.write_log(app_defs.INFO_MSG,
+                                    '{0!s} executed successfully'.format(self.FNAME_TEMPLATE.format('init')))
 
     def _prepare_window(self):
         self.main_view = QTableView()
@@ -78,7 +81,7 @@ class DataViewer(QMainWindow):
         self.sort_items.addItems(self.col_names)
 
         sort_btn = QPushButton()
-        sort_btn.setText('Sort')
+        sort_btn.setText(str_defs.SORT[self.language])
         sort_btn.clicked.connect(self.sort_values)
 
         sort_layout.addWidget(self.sort_items)
@@ -106,6 +109,8 @@ class DataViewer(QMainWindow):
         # plot_type_box.currentIndexChanged.connect(self.set_plot_type)
 
     def set_data(self, data):
+        fname = self.FNAME_TEMPLATE.format('set_data')
+        self.parent().log.write_log(app_defs.INFO_MSG, '{0!s}: Setting data into DataFrame'.format(fname))
         self.data = pd.DataFrame()
         self.data = data
         self.col_names = ['index'] + list(self.data.columns.values)
@@ -128,19 +133,21 @@ class DataViewer(QMainWindow):
         self.set_grid_box.blockSignals(False)
 
     def sort_values(self):
+        fname = self.FNAME_TEMPLATE.format('sort_values')
         sort_by = self.col_names[self.sort_items.currentIndex()]
 
         try:
             if sort_by != 'index':
                 self.data.sort_values(by=self.data.columns[self.sort_items.currentIndex() - 1], inplace=True)
                 self.parent().log.write_log(app_defs.INFO_MSG,
-                                            'all values in dataframe are sorted by {%s}' %
-                                            self.data.columns[self.sort_items.currentIndex() - 1])
+                                            '%s: all values in dataframe are sorted by {%s}' %
+                                            (fname, self.data.columns[self.sort_items.currentIndex() - 1]))
             else:
                 self.data.sort_index(inplace=True)
-                self.parent().log.write_log(app_defs.INFO_MSG, 'Data sorted by index')
+                self.parent().log.write_log(app_defs.INFO_MSG, '%s: Data sorted by index' % fname)
         except Exception as e:
-            self.parent().log.write_log(app_defs.WARNING_MSG, 'unable to sort values, exception = {%s}' % e)
+            self.parent().log.write_log(app_defs.WARNING_MSG, '%s: unable to sort values, exception = {%s}' % (fname,
+                                                                                                               e))
 
         self.show_data()
         self.parent().load_and_plot_data()

@@ -37,3 +37,4 @@ GRID_SET = {LANG_PL: 'Siatka ustawiona do {0}', LANG_ENG: 'Grid set to {0}'}
 
 # data viever docks
 OVRALL = {LANG_PL: 'Ogólne', LANG_ENG: 'Overall'}
+SORT = {LANG_PL: 'Sortuj', LANG_ENG: 'Sort'}
