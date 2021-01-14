@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QTableView, QDockWidget, QWidget, QFormLayout, QComboBox,\
-    QCheckBox, QTabWidget, QVBoxLayout, QPushButton
+    QCheckBox, QTabWidget, QVBoxLayout, QPushButton, QGroupBox
 from PyQt5.QtCore import QAbstractTableModel, Qt
 from defs import str_defs, app_defs
 import pandas as pd
@@ -80,16 +80,18 @@ class DataViewer(QMainWindow):
         self.sort_items = QComboBox()
         self.sort_items.addItems(self.col_names)
 
+        sort_cont = QGroupBox(str_defs.SORT_TOOL[self.language])
         sort_btn = QPushButton()
         sort_btn.setText(str_defs.SORT[self.language])
         sort_btn.clicked.connect(self.sort_values)
 
         sort_layout.addWidget(self.sort_items)
         sort_layout.addWidget(sort_btn)
+        sort_cont.setLayout(sort_layout)
 
         layout.addWidget(self.set_grid_box)
         layout.addWidget(plot_type_box)
-        layout.addItem(sort_layout)
+        layout.addWidget(sort_cont)
 
         tab.setLayout(layout)
         return tab
