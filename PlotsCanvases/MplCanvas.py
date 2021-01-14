@@ -11,6 +11,8 @@ class MplCanvas(FigureCanvasQTAgg):
     def __init__(self, parent=None, grid=False):
         self.now_x = []
         self.now_y = []
+        self.x_idx = 0
+        self.y_idx = 0
         self.plot_type = PlotTypes.D2_CHART
         self.dpi = 100
         figure = Figure(figsize=(10, 10), dpi=self.dpi)
@@ -25,12 +27,16 @@ class MplCanvas(FigureCanvasQTAgg):
     def upload_data(self, data):
         columns = data.columns.tolist()
 
-        if len(columns) > 1:
-            self.now_y = data[columns[0]].tolist()
-            self.now_x = data[columns[1]].tolist()
+        if self.x_idx == -1:
+            self.now_x = data.index.tolist()
         else:
+            self.now_x = data[columns[self.x_idx]].tolist()
+
+        if self.y_idx == -1:
             self.now_y = data.index.tolist()
-            self.now_x = data[columns[0]].tolist()
+        else:
+            self.now_y = data[columns[self.y_idx]].tolist()
+
         self.show()
 
     def show(self):
@@ -58,3 +64,9 @@ class MplCanvas(FigureCanvasQTAgg):
 
     def _check_validate_y(self):
         self.pie_data = [y for y in self.now_y if y > 0]
+
+    def set_x(self, x_idx):
+        self.x_idx = x_idx
+
+    def set_y(self, y_idx):
+        self.y_idx= y_idx

@@ -9,16 +9,21 @@ class PyQtGraphCanvas(pg.PlotWidget):
         self.plot_type = PlotTypes.D2_CHART
         self.x_pos = 0
         self.y_pos = 0
+        self.x_idx = 0
+        self.y_idx = 0
 
     def upload_data(self, data):
         columns = data.columns.tolist()
 
-        if len(columns) > 1:
-            self.y_pos = data[columns[0]].tolist()
-            self.x_pos = data[columns[1]].tolist()
+        if self.x_idx == -1:
+            self.x_pos = data.index.tolist()
         else:
+            self.x_pos = data[columns[self.x_idx]].tolist()
+
+        if self.y_idx == -1:
             self.y_pos = data.index.tolist()
-            self.x_pos = data[columns[0]].tolist()
+        else:
+            self.y_pos = data[columns[self.y_idx]].tolist()
 
         self.show_plot()
 
@@ -45,3 +50,9 @@ class PyQtGraphCanvas(pg.PlotWidget):
     def set_plot_type(self, type_no):
         self.plot_type = type_no
         self.show_plot()
+
+    def set_x(self, x_idx):
+        self.x_idx = x_idx
+
+    def set_y(self, y_idx):
+        self.y_idx= y_idx

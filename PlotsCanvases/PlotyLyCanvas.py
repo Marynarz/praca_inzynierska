@@ -9,6 +9,8 @@ from defs.app_defs import PlotTypes
 class PlotLyCanvas(QWebEngineView):
     def __init__(self):
         super().__init__()
+        self.x_idx = 0
+        self.y_idx = 0
         self.plot_type = PlotTypes.D2_CHART
         self.data = pd.DataFrame((0, ), index=(0, ))
         self.fig = px.line(self.data)
@@ -21,12 +23,18 @@ class PlotLyCanvas(QWebEngineView):
     def upload_data(self, data):
         self.data = data
 
-        if len(self.data.columns) > 1:
-            x = self.data.columns[0]
-            y = self.data.columns[1]
-        else:
+        self.show_plot()
+
+    def prep_plot(self):
+        if self.x_idx == -1:
             x = self.data.index.name
-            y = self.data.columns[0]
+        else:
+            x = self.data.columns[self.x_idx]
+
+        if self.y_idx == -1:
+            y = self.data.index.name
+        else:
+            y = self.data.columns[self.y_idx]
 
         if self.plot_type == PlotTypes.D2_CHART:
             self.fig = px.line(self.data, y=y, x=x)
@@ -34,9 +42,9 @@ class PlotLyCanvas(QWebEngineView):
             self.fig = px.bar(self.data, y=y, x=x)
         elif self.plot_type == PlotTypes.PIE_CHART:
             self.fig = px.pie(self.data, values=x)
-        self.show_plot()
 
     def show_plot(self):
+        self.prep_plot()
         raw_html = self.raw_html_head + po.plot(self.fig,
                                                 include_plotlyjs=False,
                                                 output_type='div') + self.raw_html_tail
@@ -49,3 +57,9 @@ class PlotLyCanvas(QWebEngineView):
     def set_plot_type(self, type_no):
         self.plot_type = type_no
         self.upload_data(self.data)
+
+    def set_x(self, x_idx):
+        self.x_idx = x_idx
+
+    def set_y(self, y_idx):
+        self.y_idx= y_idx
