@@ -24,7 +24,7 @@ class MplCanvas(FigureCanvasQTAgg):
         FigureCanvasQTAgg.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         FigureCanvasQTAgg.updateGeometry(self)
 
-    def upload_data(self, data):
+    def upload_data(self, data=None):
         columns = data.columns.tolist()
 
         if self.x_idx == -1:

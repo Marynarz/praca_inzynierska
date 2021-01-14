@@ -102,6 +102,7 @@ class DataViewer(QMainWindow):
 
         self.y_column_types = QComboBox()
         self.y_column_types.addItems(self.col_names)
+        self.y_column_types.currentIndexChanged.connect(self.set_y)
 
         layout.addWidget(self.y_column_types)
 
@@ -157,3 +158,14 @@ class DataViewer(QMainWindow):
     def show_data(self):
         model = TableModel(data=self.data)
         self.main_view.setModel(model)
+
+    def set_y(self):
+        y_pos = self.col_names[self.y_column_types.currentIndex()]
+        if y_pos != 'index':
+            col_idx = self.y_column_types.currentIndex() -1
+        else:
+            col_idx = -1
+
+        for canvas in self.parent().canvases:
+            self.parent().canvases[canvas].set_y(col_idx)
+            self.parent().canvases[canvas].show()
