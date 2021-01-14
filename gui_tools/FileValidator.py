@@ -30,7 +30,7 @@ class FileValidator(object):
         else:
             return app_defs.NOERROR
 
-    def validate_txt_file(self, source_file, sort=False):
+    def validate_txt_file(self, source_file):
         fname = self.FNAME_PATTERN % 'validate_txt_file'
 
         header = None
@@ -45,10 +45,7 @@ class FileValidator(object):
 
         self.values_pd = pd.read_csv(source_file, sep=" ", header=header)
 
-        if sort:
-            self.sort_values()
-
-    def validate_csv_file(self, source_file, sort=False):
+    def validate_csv_file(self, source_file):
         fname = self.FNAME_PATTERN % 'validate_csv_file'
         self.log.write_log(app_defs.INFO_MSG, '%s: csv file chosen, validate' % fname)
 
@@ -64,26 +61,11 @@ class FileValidator(object):
 
         self.values_pd = pd.read_csv(source_file, header=header)
 
-        if sort:
-            self.sort_values()
-
-    def validate_json_file(self, source_file, sort=False):
+    def validate_json_file(self, source_file):
         fname = self.FNAME_PATTERN % 'validate_json_file'
         self.log.write_log(app_defs.INFO_MSG, '%s: json file chosen, validate' % fname)
 
         self.values_pd = pd.read_json(source_file)
-
-        if sort:
-            self.sort_values()
-
-    def sort_values(self):
-        fname = self.FNAME_PATTERN % 'sort_values'
-        try:
-            self.values_pd.sort_values(by=self.values_pd.columns[0], inplace=True)
-            self.log.write_log(app_defs.INFO_MSG, '%s: all values in dataframe '
-                                                  'are sorted by {%s}' % (fname, self.values_pd.columns[0]))
-        except Exception as e:
-            self.log.write_log(app_defs.WARNING_MSG, '%s: unable to sort values, excpetion = {%s}' % (fname, e))
 
     def get_values(self):
         fname = self.FNAME_PATTERN % 'get_values'
