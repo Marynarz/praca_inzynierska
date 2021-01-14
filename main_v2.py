@@ -135,9 +135,9 @@ class MainWindow(QMainWindow):
         self.docket_widget = QWidget()
         dock_layout = QFormLayout()
 
-        set_grid_box = QCheckBox(str_defs.GRID[self.language], self)
-        set_grid_box.setChecked(self.grid)
-        set_grid_box.stateChanged.connect(self.set_grid)
+        self.set_grid_box = QCheckBox(str_defs.GRID[self.language], self)
+        self.set_grid_box.setChecked(self.grid)
+        self.set_grid_box.stateChanged.connect(self.set_grid)
 
         show_data_btn = QToolButton()
         show_data_btn.setDefaultAction(self.show_data_action)
@@ -147,7 +147,7 @@ class MainWindow(QMainWindow):
         plot_type_box.currentIndexChanged.connect(self.set_plot_type)
 
         self.docket_widget.setLayout(dock_layout)
-        dock_layout.addWidget(set_grid_box)
+        dock_layout.addWidget(self.set_grid_box)
         dock_layout.addWidget(show_data_btn)
         dock_layout.addWidget(plot_type_box)
 
@@ -214,7 +214,10 @@ class MainWindow(QMainWindow):
         for key in self.canvases:
             self.canvases[key].set_grid_(self.grid)
 
+        self.set_grid_box.setChecked(self.grid)
+
         self.set_status(str_defs.GRID_SET[self.language].format(self.grid))
+        self.data_viewer.upd_grid(self.grid)
 
     def set_plot_type(self, plot_type):
         for key in self.canvases:
