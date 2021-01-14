@@ -34,3 +34,6 @@ PLOT_TYPES = {LANG_PL: ('Wykres 2D', 'Wykres kołowy', 'Wykres słupkowy'),
 OK = 'Ok'
 NOK = 'NOk'
 GRID_SET = {LANG_PL: 'Siatka ustawiona do {0}', LANG_ENG: 'Grid set to {0}'}
+
+# data viever docks
+OVRALL = {LANG_PL: 'Ogólne', LANG_ENG: 'Overall'}

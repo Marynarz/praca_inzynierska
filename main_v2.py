@@ -131,6 +131,7 @@ class MainWindow(QMainWindow):
         self.addToolBar(tools_toolbar)
 
     def _create_dock(self):
+        self.log.write_log(app_defs.INFO_MSG, 'Creating Dock')
         self.main_tools_dock = QDockWidget(str_defs.DOCK_TITLE[self.language], self)
         self.docket_widget = QWidget()
         dock_layout = QFormLayout()
@@ -214,10 +215,12 @@ class MainWindow(QMainWindow):
         for key in self.canvases:
             self.canvases[key].set_grid_(self.grid)
 
+        self.set_grid_box.blockSignals(True)
         self.set_grid_box.setChecked(self.grid)
+        self.set_grid_box.blockSignals(False)
 
         self.set_status(str_defs.GRID_SET[self.language].format(self.grid))
-        self.data_viewer.upd_grid(self.grid)
+        self.data_viewer.upd_grid()
 
     def set_plot_type(self, plot_type):
         for key in self.canvases:

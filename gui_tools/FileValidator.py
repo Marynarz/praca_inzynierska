@@ -30,7 +30,7 @@ class FileValidator(object):
         else:
             return app_defs.NOERROR
 
-    def validate_txt_file(self, source_file, sort=True):
+    def validate_txt_file(self, source_file, sort=False):
         fname = self.FNAME_PATTERN % 'validate_txt_file'
 
         header = None
@@ -48,7 +48,7 @@ class FileValidator(object):
         if sort:
             self.sort_values()
 
-    def validate_csv_file(self, source_file, sort=True):
+    def validate_csv_file(self, source_file, sort=False):
         fname = self.FNAME_PATTERN % 'validate_csv_file'
         self.log.write_log(app_defs.INFO_MSG, '%s: csv file chosen, validate' % fname)
 
@@ -67,7 +67,7 @@ class FileValidator(object):
         if sort:
             self.sort_values()
 
-    def validate_json_file(self, source_file, sort=True):
+    def validate_json_file(self, source_file, sort=False):
         fname = self.FNAME_PATTERN % 'validate_json_file'
         self.log.write_log(app_defs.INFO_MSG, '%s: json file chosen, validate' % fname)
 

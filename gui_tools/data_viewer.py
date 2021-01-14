@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QMainWindow, QTableView, QDockWidget, QWidget, QFormLayout, QComboBox, QCheckBox, QTabWidget
+from PyQt5.QtWidgets import QMainWindow, QTableView, QDockWidget, QWidget, QFormLayout, QComboBox,\
+    QCheckBox, QTabWidget, QVBoxLayout, QPushButton
 from PyQt5.QtCore import QAbstractTableModel, Qt
 import operator
-from defs import str_defs
+from defs import str_defs, app_defs
 import pandas as pd
 
 
@@ -37,7 +38,6 @@ class DataViewer(QMainWindow):
         if not data:
             data = pd.DataFrame((0, 0))
         self.data = pd.DataFrame((0, 0))
-        self.grid = self.parent().grid
         self.col_names = []
         self.language = self.parent().language
         self.setWindowTitle(str_defs.SHOW_DATA_TITILE[self.language])
@@ -54,7 +54,7 @@ class DataViewer(QMainWindow):
         self.main_tools_dock = QDockWidget(str_defs.DOCK_TITLE[self.language], self)
         self.dock_tabs = QTabWidget()
 
-        self.dock_tabs.addTab(self._create_tab_overall(), 'Overall')
+        self.dock_tabs.addTab(self._create_tab_overall(), str_defs.OVRALL[self.language])
         self.dock_tabs.addTab(self._create_tab_y(), 'Y')
 
         self.main_tools_dock.setWidget(self.dock_tabs)
@@ -65,16 +65,28 @@ class DataViewer(QMainWindow):
         tab = QWidget()
         layout = QFormLayout()
 
-        set_grid_box = QCheckBox(str_defs.GRID[self.language], self)
-        set_grid_box.setChecked(self.grid)
-        set_grid_box.stateChanged.connect(self.parent().set_grid)
+        self.set_grid_box = QCheckBox(str_defs.GRID[self.language], self)
+        self.set_grid_box.setChecked(self.parent().grid)
+        self.set_grid_box.stateChanged.connect(self.parent().set_grid)
 
         plot_type_box = QComboBox()
         plot_type_box.addItems(str_defs.PLOT_TYPES[self.language])
         plot_type_box.currentIndexChanged.connect(self.parent().set_plot_type)
 
-        layout.addWidget(set_grid_box)
+        sort_layout = QVBoxLayout()
+        self.sort_items = QComboBox()
+        self.sort_items.addItems(self.col_names)
+
+        sort_btn = QPushButton()
+        sort_btn.setText('Sort')
+        sort_btn.clicked.connect(self.sort_values)
+
+        sort_layout.addWidget(self.sort_items)
+        sort_layout.addWidget(sort_btn)
+
+        layout.addWidget(self.set_grid_box)
         layout.addWidget(plot_type_box)
+        layout.addItem(sort_layout)
 
         tab.setLayout(layout)
         return tab
@@ -98,21 +110,40 @@ class DataViewer(QMainWindow):
         self.data = data
         self.col_names = ['index'] + list(self.data.columns.values)
 
-        self.col_names = [str(item) for item in self.col_names]
+        self.col_names = [str(item).strip() for item in self.col_names]
 
         self.y_column_types.clear()
         self.y_column_types.addItems(self.col_names)
+        self.sort_items.clear()
+        self.sort_items.addItems(self.col_names)
 
         self.show_data()
 
     def get_data(self):
         return self.data
 
-    def upd_grid(self, grid=False):
-        self.grid = grid
+    def upd_grid(self):
+        self.set_grid_box.blockSignals(True)
+        self.set_grid_box.setCheckState(self.parent().grid)
+        self.set_grid_box.blockSignals(False)
 
     def sort_values(self):
-        self.data.sort(key=operator.itemgetter(0))
+        sort_by = self.col_names[self.sort_items.currentIndex()]
+
+        try:
+            if sort_by != 'index':
+                self.data.sort_values(by=self.data.columns[self.sort_items.currentIndex() - 1], inplace=True)
+                self.parent().log.write_log(app_defs.INFO_MSG,
+                                            'all values in dataframe are sorted by {%s}' %
+                                            self.data.columns[self.sort_items.currentIndex() - 1])
+            else:
+                self.data.sort_index(inplace=True)
+                self.parent().log.write_log(app_defs.INFO_MSG, 'Data sorted by index')
+        except Exception as e:
+            self.parent().log.write_log(app_defs.WARNING_MSG, 'unable to sort values, exception = {%s}' % e)
+
+        self.show_data()
+        self.parent().load_and_plot_data()
 
     def show_data(self):
         model = TableModel(data=self.data)
