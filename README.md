@@ -60,6 +60,7 @@ Analiza statyczna kodu na platformie CodeFactor: [Static analysis report](https:
 ### Pzzetwarzanie danych
 * Sortowanie po wybranej kolumnie
 * Ustawienie wybranej kolumny jako wartość y
+* Ustawienie wybranej kolumny jako wartość x
 
 ## Author:
 ### Niedzielski

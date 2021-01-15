@@ -58,6 +58,7 @@ class DataViewer(QMainWindow):
         self.dock_tabs = QTabWidget()
 
         self.dock_tabs.addTab(self._create_tab_overall(), str_defs.OVRALL[self.language])
+        self.dock_tabs.addTab(self._create_tab_x(), 'X')
         self.dock_tabs.addTab(self._create_tab_y(), 'Y')
 
         self.main_tools_dock.setWidget(self.dock_tabs)
@@ -101,7 +102,6 @@ class DataViewer(QMainWindow):
         layout = QFormLayout()
 
         self.y_column_types = QComboBox()
-        self.y_column_types.addItems(self.col_names)
         self.y_column_types.currentIndexChanged.connect(self.set_y)
 
         layout.addWidget(self.y_column_types)
@@ -109,7 +109,19 @@ class DataViewer(QMainWindow):
         tab_y.setLayout(layout)
 
         return tab_y
-        # plot_type_box.currentIndexChanged.connect(self.set_plot_type)
+
+    def _create_tab_x(self):
+        tab_x = QWidget()
+        layout = QFormLayout()
+
+        self.x_column_types = QComboBox()
+        self.x_column_types.currentIndexChanged.connect(self.set_x)
+
+        layout.addWidget(self.x_column_types)
+
+        tab_x.setLayout(layout)
+
+        return tab_x
 
     def set_data(self, data):
         fname = self.FNAME_TEMPLATE.format('set_data')
@@ -122,6 +134,8 @@ class DataViewer(QMainWindow):
 
         self.y_column_types.clear()
         self.y_column_types.addItems(self.col_names)
+        self.x_column_types.clear()
+        self.x_column_types.addItems(self.col_names)
         self.sort_items.clear()
         self.sort_items.addItems(self.col_names)
 
@@ -173,12 +187,12 @@ class DataViewer(QMainWindow):
         self.parent().canvas_controller.show_plot()
 
     def set_x(self):
-        y_pos = self.col_names[self.y_column_types.currentIndex()]
-        if y_pos != 'index':
-            col_idx = self.y_column_types.currentIndex() - 1
+        x_pos = self.col_names[self.x_column_types.currentIndex()]
+        if x_pos != 'index':
+            col_idx = self.x_column_types.currentIndex() - 1
         else:
             col_idx = -1
 
-        for canvas in self.parent().canvases:
-            self.parent().canvases[canvas].set_y(col_idx)
-            self.parent().load_and_plot_data()
+        self.parent().canvas_controller.clear_plot()
+        self.parent().canvas_controller.set_values('x', col_idx)
+        self.parent().canvas_controller.show_plot()
