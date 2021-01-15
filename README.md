@@ -42,6 +42,9 @@ W celu odpalenia programu należy zainstalować:
     ```
     python3 main_v2.py
     ```
+    
+## CI
+Analiza statyczne kodu na platformie CodeFactor: [Static analysis report](https://www.codefactor.io/repository/github/marynarz/praca_inzynierska)
 
 ## Author:
 ### Niedzielski
