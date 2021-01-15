@@ -77,4 +77,3 @@ class FileValidator(object):
         self.log.write_log(app_defs.INFO_MSG, '%s: clear values' % fname)
         self.values_pd = self.values_pd[0:0]
         self.log.write_log(app_defs.INFO_MSG, '%s: check if empty: %s' % (fname, self.values_pd.empty))
-
