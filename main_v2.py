@@ -59,8 +59,9 @@ class MainWindow(QMainWindow):
         self._create_dock()
         self.data_viewer = data_viewer.DataViewer(parent=self)
         self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
+        self.canvas_controller.clear_plot()
         self.load_data()
-        self.update_canvas_view()
+        self.canvas_controller.show_plot()
 
     def _create_menu(self):
         self.log.write_log(app_defs.INFO_MSG, 'Creating menus')
@@ -201,8 +202,9 @@ class MainWindow(QMainWindow):
         elif ret == app_defs.NOERROR:
             self.log.write_log(app_defs.INFO_MSG, 'File validated successfully, proceed to load and plot data.')
             self.data_viewer.set_data(file_points.get_values())
+            self.canvas_controller.clear_plot()
             self.load_data()
-            self.update_canvas_view()
+            self.canvas_controller.show_plot()
 
         if not self.re_write_log:
             self.re_write_log = True
@@ -210,24 +212,19 @@ class MainWindow(QMainWindow):
     def load_data(self):
         self.canvas_controller.upload_data(data=self.data_viewer.get_data())
 
-    def update_canvas_view(self):
-        for key in self.canvases:
-            self.canvases[key].show_plot()
-
     def set_grid(self):
-        self.log.write_log(app_defs.INFO_MSG, 'grid set to {0}'.format(not self.grid))
-        self.grid = not self.grid
+        grid = self.canvas_controller.grid
+        self.log.write_log(app_defs.INFO_MSG, 'grid set to {0}'.format(not grid))
 
-        for key in self.canvases:
-            self.canvases[key].set_grid_(self.grid)
+        self.canvas_controller.set_grid()
 
         self.set_grid_box.blockSignals(True)
-        self.set_grid_box.setChecked(self.grid)
+        self.set_grid_box.setChecked(not grid)
         self.set_grid_box.blockSignals(False)
 
-        self.set_status(str_defs.GRID_SET[self.language].format(self.grid))
+        self.set_status(str_defs.GRID_SET[self.language].format(not grid))
         self.data_viewer.upd_grid()
-        self.update_canvas_view()
+        self.canvas_controller.show_plot()
 
     def set_plot_type(self, plot_type):
         for key in self.canvases:

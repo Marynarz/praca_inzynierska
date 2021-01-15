@@ -11,26 +11,32 @@ class PyQtGraphCanvas(pg.PlotWidget):
         self.y_pos = [0, ]
         self.x_idx = 0
         self.y_idx = 0
+        self.data = pd.DataFrame((0, 0))
+        self.clear_plot()
+        self.prep_data()
+        self.show_plot()
 
     def upload_data(self, data):
-        columns = data.columns.tolist()
+        self.data = data
 
+    def prep_data(self):
+        columns = self.data.columns.tolist()
         if self.x_idx == -1:
-            self.x_pos = data.index.tolist()
+            self.x_pos = self.data.index.tolist()
         else:
-            self.x_pos = data[columns[self.x_idx]].tolist()
+            self.x_pos = self.data[columns[self.x_idx]].tolist()
 
         if self.y_idx == -1:
-            self.y_pos = data.index.tolist()
+            self.y_pos = self.data.index.tolist()
         else:
-            self.y_pos = data[columns[self.y_idx]].tolist()
+            self.y_pos = self.data[columns[self.y_idx]].tolist()
 
     def show_plot(self):
-        self.clear_plot()
+        self.prep_data()
         if self.plot_type == PlotTypes.D2_CHART:
-            self.plot(self.y_pos, self.x_pos)
+            self.plot(self.x_pos, self.y_pos)
         elif self.plot_type == PlotTypes.BAR_CHART:
-            bar_chart = pg.BarGraphItem(x=self.y_pos, height=self.x_pos, width=0.6, brush='r')
+            bar_chart = pg.BarGraphItem(x=self.x_pos, height=self.y_pos, width=0.6, brush='r')
             self.addItem(bar_chart)
         elif self.plot_type == PlotTypes.PIE_CHART:
             pass

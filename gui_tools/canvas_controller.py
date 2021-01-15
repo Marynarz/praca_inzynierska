@@ -1,6 +1,9 @@
 import pandas as pd
 
 
+##
+# @brief CanvasController - wrapper and controller for all canvases
+#
 class CanvasController:
     def __init__(self, canvases):
         self.canvases = canvases
@@ -28,8 +31,21 @@ class CanvasController:
                 self.canvases[canvas].set_x(val_idx)
 
     # canvas view block
+    def clear_plot(self):
+        for key in self.canvases:
+            self.canvases[key].clear_plot()
+
     ##
-    # @brief set_grid - settin grid on/off
+    # @brief show_plot - show updated plot
+    #
+    def show_plot(self):
+        for key in self.canvases:
+            self.canvases[key].show_plot()
+
+    ##
+    # @brief set_grid - setting grid on/off
     #
     def set_grid(self):
-        pass
+        self.grid = not self.grid
+        for key in self.canvases:
+            self.canvases[key].set_grid_(self.grid)

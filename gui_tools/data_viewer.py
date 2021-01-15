@@ -153,8 +153,9 @@ class DataViewer(QMainWindow):
                                                                                                                e))
 
         self.show_data()
-        self.parent().load_data()
-        self.parent().update_canvas_view()
+        self.parent().canvas_controller.clear_plot()
+        self.parent().canvas_controller.upload_data(self.data)
+        self.parent().canvas_controller.show_plot()
 
     def show_data(self):
         model = TableModel(data=self.data)
@@ -167,9 +168,9 @@ class DataViewer(QMainWindow):
         else:
             col_idx = -1
 
-        for canvas in self.parent().canvases:
-            self.parent().canvases[canvas].set_y(col_idx)
-            self.parent().update_canvas_view()
+        self.parent().canvas_controller.clear_plot()
+        self.parent().canvas_controller.set_values('y', col_idx)
+        self.parent().canvas_controller.show_plot()
 
     def set_x(self):
         y_pos = self.col_names[self.y_column_types.currentIndex()]

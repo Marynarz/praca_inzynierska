@@ -1,6 +1,5 @@
 import plotly.express as px
 import plotly.offline as po
-import plotly.graph_objs as pgo
 import pandas as pd
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from defs.app_defs import PlotTypes
@@ -51,15 +50,17 @@ class PlotLyCanvas(QWebEngineView):
         self.setHtml(raw_html)
         self.show()
 
+    def clear_plot(self):
+        pass
+
     def set_grid_(self, state):
         pass
 
     def set_plot_type(self, type_no):
         self.plot_type = type_no
-        self.upload_data(self.data)
 
     def set_x(self, x_idx):
         self.x_idx = x_idx
 
     def set_y(self, y_idx):
-        self.y_idx= y_idx
+        self.y_idx = y_idx

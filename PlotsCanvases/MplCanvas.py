@@ -4,11 +4,13 @@ from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from defs.app_defs import PlotTypes
+import pandas as pd
 
 
 class MplCanvas(FigureCanvasQTAgg):
 
     def __init__(self, parent=None, grid=False):
+        self.data = pd.DataFrame((0, 0))
         self.now_x = []
         self.now_y = []
         self.x_idx = 0
@@ -20,29 +22,35 @@ class MplCanvas(FigureCanvasQTAgg):
         FigureCanvasQTAgg.__init__(self, figure)
         self.setParent(parent)
         self.grid = grid
+        self.clear_plot()
+        self.prep_data()
+        self.show_plot()
 
         FigureCanvasQTAgg.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         FigureCanvasQTAgg.updateGeometry(self)
 
-    def upload_data(self, data=None):
-        columns = data.columns.tolist()
+    def upload_data(self, data):
+        self.data = data
+
+    def prep_data(self):
+        columns = self.data.columns.tolist()
 
         if self.x_idx == -1:
-            self.now_x = data.index.tolist()
+            self.now_x = self.data.index.tolist()
         else:
-            self.now_x = data[columns[self.x_idx]].tolist()
+            self.now_x = self.data[columns[self.x_idx]].tolist()
 
         if self.y_idx == -1:
-            self.now_y = data.index.tolist()
+            self.now_y = self.data.index.tolist()
         else:
-            self.now_y = data[columns[self.y_idx]].tolist()
+            self.now_y = self.data[columns[self.y_idx]].tolist()
 
     def show_plot(self):
-        self.clear_plot()
+        self.prep_data()
         if self.plot_type == PlotTypes.D2_CHART:
-            self.axes.plot(self.now_y, self.now_x)
+            self.axes.plot(self.now_x, self.now_y)
         elif self.plot_type == PlotTypes.BAR_CHART:
-            self.axes.bar(self.now_y, self.now_x)
+            self.axes.bar(self.now_x, self.now_y)
         elif self.plot_type == PlotTypes.PIE_CHART:
             self._check_validate_y()
             self.axes.pie(x=self.pie_data, labels=range(len(self.pie_data)))
