@@ -44,7 +44,22 @@ W celu odpalenia programu należy zainstalować:
     ```
     
 ## CI
-Analiza statyczne kodu na platformie CodeFactor: [Static analysis report](https://www.codefactor.io/repository/github/marynarz/praca_inzynierska)
+Analiza statyczna kodu na platformie CodeFactor: [Static analysis report](https://www.codefactor.io/repository/github/marynarz/praca_inzynierska)
+
+## Funkcje
+### Otwierane pliki
+* TXT ```*.txt```
+* CSV ```*.csv```
+* JSON ```*.json```
+
+### Obsługiwane typy wykresów:
+* Liniowy (jedna linia)
+* Słupkowy
+* Kołowy
+
+### Pzzetwarzanie danych
+* Sortowanie po wybranej kolumnie
+* Ustawienie wybranej kolumny jako wartość y
 
 ## Author:
 ### Niedzielski
