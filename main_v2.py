@@ -182,7 +182,7 @@ class MainWindow(QMainWindow):
         self.set_status('Open file')
         ret = app_defs.NO_ACTION
         file_to_open, _ = QFileDialog.getOpenFileName(self, 'Open file',
-                                                      filter='TextFile (*.txt);;CSV (*.csv)')
+                                                      filter='TextFile (*.txt);;CSV (*.csv);;JSON (*.json)')
         self.log.write_log(app_defs.INFO_MSG, 'Selected file: ' + str(file_to_open))
         if file_to_open:
             file_points = FileValidator.FileValidator('Main', append=self.re_write_log)
@@ -224,6 +224,7 @@ class MainWindow(QMainWindow):
 
         self.set_status(str_defs.GRID_SET[self.language].format(not grid))
         self.data_viewer.upd_grid()
+        self.canvas_controller.clear_plot()
         self.canvas_controller.show_plot()
 
     def set_plot_type(self, plot_type):

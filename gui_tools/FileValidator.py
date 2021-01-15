@@ -6,7 +6,9 @@ from gui_tools import logger
 class FileValidator(object):
     values_pd = pd.DataFrame()
     FNAME_PATTERN = 'FileValidator.%s'
-    validators_dict = {'txt': 'self.validate_txt_file', 'csv': 'self.validate_csv_file'}
+    validators_dict = {'txt': 'self.validate_txt_file',
+                       'csv': 'self.validate_csv_file',
+                       'json': 'self.validate_json_file'}
 
     def __init__(self, entry_point, append=False):
         self.entry_point = entry_point
