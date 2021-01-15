@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, 
     QMessageBox, QVBoxLayout, QLabel, QToolBar, QDockWidget, QCheckBox, QFormLayout, QToolButton, QComboBox
 from PyQt5.QtCore import QSettings, Qt
 from defs import str_defs, app_defs
-from gui_tools import logger, FileValidator, data_viewer
+from gui_tools import logger, FileValidator, data_viewer, canvas_controller
 from PlotsCanvases import MplCanvas, PyQtGraphCanvas, BokehCanvas, PlotLyCanvas
 
 import pandas as pd
@@ -17,6 +17,7 @@ class MainWindow(QMainWindow):
         self.canvases = {app_defs.MATPLOTLIB: MplCanvas(parent=self, grid=False),
                          app_defs.PYQTGRAPH: PyQtGraphCanvas(),
                          app_defs.PLOTLY: PlotLyCanvas()}
+        self.canvas_controller = canvas_controller.CanvasController(self.canvases)
         self.grid = False
 
         self.log = logger.Logger('main_gui')
@@ -207,8 +208,7 @@ class MainWindow(QMainWindow):
             self.re_write_log = True
 
     def load_data(self):
-        for key in self.canvases:
-            self.canvases[key].upload_data(self.data_viewer.get_data())
+        self.canvas_controller.upload_data(data=self.data_viewer.get_data())
 
     def update_canvas_view(self):
         for key in self.canvases:

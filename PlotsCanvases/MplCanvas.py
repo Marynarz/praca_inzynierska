@@ -38,7 +38,7 @@ class MplCanvas(FigureCanvasQTAgg):
             self.now_y = data[columns[self.y_idx]].tolist()
 
     def show_plot(self):
-        self.axes.cla()
+        self.clear_plot()
         if self.plot_type == PlotTypes.D2_CHART:
             self.axes.plot(self.now_y, self.now_x)
         elif self.plot_type == PlotTypes.BAR_CHART:
@@ -48,6 +48,9 @@ class MplCanvas(FigureCanvasQTAgg):
             self.axes.pie(x=self.pie_data, labels=range(len(self.pie_data)))
         self.axes.grid(self.grid)
         self.draw()
+
+    def clear_plot(self):
+        self.axes.cla()
 
     def set_grid_(self, state):
         self.grid = state
