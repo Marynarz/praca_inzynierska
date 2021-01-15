@@ -7,8 +7,8 @@ class PyQtGraphCanvas(pg.PlotWidget):
     def __init__(self):
         super().__init__()
         self.plot_type = PlotTypes.D2_CHART
-        self.x_pos = 0
-        self.y_pos = 0
+        self.x_pos = [0, ]
+        self.y_pos = [0, ]
         self.x_idx = 0
         self.y_idx = 0
 
@@ -25,8 +25,6 @@ class PyQtGraphCanvas(pg.PlotWidget):
         else:
             self.y_pos = data[columns[self.y_idx]].tolist()
 
-        self.show_plot()
-
     def show_plot(self):
         self.clear_plot()
         if self.plot_type == PlotTypes.D2_CHART:
@@ -39,7 +37,6 @@ class PyQtGraphCanvas(pg.PlotWidget):
 
     def set_grid_(self, state):
         self.showGrid(x=state, y=state)
-        self.show_plot()
 
     def set_line(self):
         pass
@@ -55,4 +52,4 @@ class PyQtGraphCanvas(pg.PlotWidget):
         self.x_idx = x_idx
 
     def set_y(self, y_idx):
-        self.y_idx= y_idx
+        self.y_idx = y_idx

@@ -37,9 +37,7 @@ class MplCanvas(FigureCanvasQTAgg):
         else:
             self.now_y = data[columns[self.y_idx]].tolist()
 
-        self.show()
-
-    def show(self):
+    def show_plot(self):
         self.axes.cla()
         if self.plot_type == PlotTypes.D2_CHART:
             self.axes.plot(self.now_y, self.now_x)
@@ -53,14 +51,12 @@ class MplCanvas(FigureCanvasQTAgg):
 
     def set_grid_(self, state):
         self.grid = state
-        self.show()
 
     def set_line(self):
         pass
 
     def set_plot_type(self, type_no):
         self.plot_type = type_no
-        self.show()
 
     def _check_validate_y(self):
         self.pie_data = [y for y in self.now_y if y > 0]
@@ -69,4 +65,4 @@ class MplCanvas(FigureCanvasQTAgg):
         self.x_idx = x_idx
 
     def set_y(self, y_idx):
-        self.y_idx= y_idx
+        self.y_idx = y_idx
