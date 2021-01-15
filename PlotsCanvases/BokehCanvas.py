@@ -23,4 +23,3 @@ class BokehCanvas(QWebEngineView):
     def show_output(self):
         # output_notebook()
         output_file('bokeh_plot.html')
-
