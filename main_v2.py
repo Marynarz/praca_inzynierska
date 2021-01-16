@@ -17,7 +17,8 @@ class MainWindow(QMainWindow):
         # Canvas container
         self.canvases = {app_defs.MATPLOTLIB: MplCanvas(parent=self, grid=False),
                          app_defs.PYQTGRAPH: PyQtGraphCanvas(),
-                         app_defs.PLOTLY: PlotLyCanvas()}
+                         app_defs.PLOTLY: PlotLyCanvas(),
+                         app_defs.BOKEH: BokehCanvas()}
         self.canvas_controller = canvas_controller.CanvasController(self.canvases)
         self.grid = False
 

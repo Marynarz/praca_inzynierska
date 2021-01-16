@@ -12,7 +12,7 @@ class PlotLyCanvas(QWebEngineView):
         self.y_idx = 0
         self.plot_type = PlotTypes.D2_CHART
         self.data = pd.DataFrame((0, ), index=(0, ))
-        self.fig = px.line(self.data)
+        self.fig = px.line(self.data, x=0, y=0)
 
         self.raw_html_head = '<html><head><meta charset="utf-8" />' \
                              '<script src="https://cdn.plot.ly/plotly-latest.min.js"></script></head>' \
@@ -33,12 +33,15 @@ class PlotLyCanvas(QWebEngineView):
         else:
             y = self.data.columns[self.y_idx]
 
-        if self.plot_type == PlotTypes.D2_CHART:
-            self.fig = px.line(self.data, y=y, x=x)
-        elif self.plot_type == PlotTypes.BAR_CHART:
-            self.fig = px.bar(self.data, y=y, x=x)
-        elif self.plot_type == PlotTypes.PIE_CHART:
-            self.fig = px.pie(self.data, values=x)
+        try:
+            if self.plot_type == PlotTypes.D2_CHART:
+                self.fig = px.line(self.data, y=y, x=x)
+            elif self.plot_type == PlotTypes.BAR_CHART:
+                self.fig = px.bar(self.data, y=y, x=x)
+            elif self.plot_type == PlotTypes.PIE_CHART:
+                self.fig = px.pie(self.data, values=x)
+        except ValueError as e:
+            print(e)
 
     def show_plot(self):
         self.prep_plot()
