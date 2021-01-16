@@ -13,6 +13,7 @@ W celu odpalenia programu należy zainstalować:
 * `MatPlotLib`
 * `PyPlot`
 * `PyQtGraph`
+* `Bokeh`
 ### Misc
 * `Pandas`
 ## Docs:
@@ -36,6 +37,7 @@ W celu odpalenia programu należy zainstalować:
     pip install matplotlib
     pip install pyplot
     pip install pyqtgraph
+    pip install bokeh
     pip install pandas
     ```
 * **E**njoy
