@@ -9,9 +9,11 @@ import pandas as pd
 class BokehCanvas(QWebEngineView):
     def __init__(self):
         super().__init__()
-        self.fig = figure(plot_width=400, plot_height=400)
+        self.fig = figure(plot_width=380, plot_height=380)
         self.x_idx = 0
         self.y_idx = 0
+        self.fig.xgrid.visible = False
+        self.fig.ygrid.visible = False
         self.plot_type = PlotTypes.D2_CHART
         self.data = ColumnDataSource(pd.DataFrame((0, ), columns=('0', )))
 
@@ -26,13 +28,20 @@ class BokehCanvas(QWebEngineView):
     def upload_data(self, data):
         data = data.rename(columns={col: str(col) for col in data.columns})
         self.data = ColumnDataSource(data)
-        print(self.data)
 
     def prep_plot(self):
-        print(self.data)
+        if self.x_idx == -1:
+            x = self.data.column_names[0]
+        else:
+            x = self.data.column_names[self.x_idx + 1]
+
+        if self.y_idx == -1:
+            y = self.data.column_names[0]
+        else:
+            y = self.data.column_names[self.y_idx + 1]
 
         try:
-            self.fig.line(x='0', y='0', source=self.data)
+            self.fig.line(x=x, y=y, source=self.data)
             save(self.fig)
             self.show_output()
         except ValueError as e:
@@ -51,7 +60,8 @@ class BokehCanvas(QWebEngineView):
         pass
 
     def set_grid_(self, state):
-        pass
+        self.fig.xgrid.visible = state
+        self.fig.ygrid.visible = state
 
     def set_plot_type(self, type_no):
         self.plot_type = type_no

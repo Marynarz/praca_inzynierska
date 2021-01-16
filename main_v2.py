@@ -40,7 +40,7 @@ class MainWindow(QMainWindow):
 
         # Setting central widget
         self.general_layout = QGridLayout()
-        self.general_layout.setRowMinimumHeight(1, 200)
+        self.general_layout.setRowMinimumHeight(1, 400)
         self._central_widget = QWidget(self)
         self.setCentralWidget(self._central_widget)
         self._central_widget.setLayout(self.general_layout)
@@ -62,6 +62,7 @@ class MainWindow(QMainWindow):
         self.data_viewer = data_viewer.DataViewer(parent=self)
         self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
         self.load_data()
+        self.canvas_controller.set_values('y', 1)
 
     def _create_menu(self):
         self.log.write_log(app_defs.INFO_MSG, 'Creating menus')

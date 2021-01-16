@@ -10,9 +10,10 @@ class PlotLyCanvas(QWebEngineView):
         super().__init__()
         self.x_idx = 0
         self.y_idx = 0
+        self.grid = False
         self.plot_type = PlotTypes.D2_CHART
         self.data = pd.DataFrame((0, ), index=(0, ))
-        self.fig = px.line(self.data, x=0, y=0)
+        self.fig = px.line(self.data, y=self.data.index.name, x=self.data.index.name)
 
         self.raw_html_head = '<html><head><meta charset="utf-8" />' \
                              '<script src="https://cdn.plot.ly/plotly-latest.min.js"></script></head>' \
@@ -40,6 +41,8 @@ class PlotLyCanvas(QWebEngineView):
                 self.fig = px.bar(self.data, y=y, x=x)
             elif self.plot_type == PlotTypes.PIE_CHART:
                 self.fig = px.pie(self.data, values=x)
+            self.fig.update_yaxes(showgrid=self.grid)
+            self.fig.update_xaxes(showgrid=self.grid)
         except ValueError as e:
             print(e)
 
@@ -55,7 +58,7 @@ class PlotLyCanvas(QWebEngineView):
         pass
 
     def set_grid_(self, state):
-        pass
+        self.grid = state
 
     def set_plot_type(self, type_no):
         self.plot_type = type_no
