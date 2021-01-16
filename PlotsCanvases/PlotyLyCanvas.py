@@ -22,8 +22,6 @@ class PlotLyCanvas(QWebEngineView):
     def upload_data(self, data):
         self.data = data
 
-        self.show_plot()
-
     def prep_plot(self):
         if self.x_idx == -1:
             x = self.data.index.name

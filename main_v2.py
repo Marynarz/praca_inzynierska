@@ -1,7 +1,8 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, QWidget, QAction, QFileDialog,\
-    QMessageBox, QVBoxLayout, QLabel, QToolBar, QDockWidget, QCheckBox, QFormLayout, QToolButton, QComboBox
+    QMessageBox, QVBoxLayout, QLabel, QToolBar, QDockWidget, QCheckBox, QFormLayout, QToolButton, QComboBox,\
+    QGroupBox
 from PyQt5.QtCore import QSettings, Qt
 from defs import str_defs, app_defs
 from gui_tools import logger, FileValidator, data_viewer, canvas_controller
@@ -45,7 +46,7 @@ class MainWindow(QMainWindow):
 
         x, y = 0, 0
         for layout in self.layouts:
-            self.general_layout.addLayout(layout, x, y)
+            self.general_layout.addWidget(layout, x, y)
             if y == 1:
                 y = 0
                 x += 1
@@ -59,9 +60,7 @@ class MainWindow(QMainWindow):
         self._create_dock()
         self.data_viewer = data_viewer.DataViewer(parent=self)
         self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
-        self.canvas_controller.clear_plot()
         self.load_data()
-        self.canvas_controller.show_plot()
 
     def _create_menu(self):
         self.log.write_log(app_defs.INFO_MSG, 'Creating menus')
@@ -98,10 +97,11 @@ class MainWindow(QMainWindow):
         # setting layouts
         self.layouts = []
         for key in self.canvases:
+            group_box = QGroupBox(app_defs.CANVAS_NAME[key])
             layout = QVBoxLayout()
-            layout.addWidget(QLabel(app_defs.CANVAS_NAME[key]))
             layout.addWidget(self.canvases[key])
-            self.layouts.append(layout)
+            group_box.setLayout(layout)
+            self.layouts.append(group_box)
 
     def _create_actions(self):
         self.file_open = QAction(str_defs.FILE_OPEN[self.language], self)
@@ -202,9 +202,7 @@ class MainWindow(QMainWindow):
         elif ret == app_defs.NOERROR:
             self.log.write_log(app_defs.INFO_MSG, 'File validated successfully, proceed to load and plot data.')
             self.data_viewer.set_data(file_points.get_values())
-            self.canvas_controller.clear_plot()
             self.load_data()
-            self.canvas_controller.show_plot()
 
         if not self.re_write_log:
             self.re_write_log = True
@@ -224,12 +222,9 @@ class MainWindow(QMainWindow):
 
         self.set_status(str_defs.GRID_SET[self.language].format(not grid))
         self.data_viewer.upd_grid()
-        self.canvas_controller.clear_plot()
-        self.canvas_controller.show_plot()
 
     def set_plot_type(self, plot_type):
-        for key in self.canvases:
-            self.canvases[key].set_plot_type(plot_type + 1)
+        self.canvas_controller.change_plot_type(plot_type + 1)
 
 
 if __name__ == '__main__':

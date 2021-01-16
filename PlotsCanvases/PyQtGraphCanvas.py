@@ -52,7 +52,6 @@ class PyQtGraphCanvas(pg.PlotWidget):
 
     def set_plot_type(self, type_no):
         self.plot_type = type_no
-        self.show_plot()
 
     def set_x(self, x_idx):
         self.x_idx = x_idx
