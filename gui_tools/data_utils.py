@@ -2,7 +2,7 @@ import math
 
 
 def percent_to_radius(data, column_name):
-    data['Radius'] = math.radians((data[column_name] / 100) * 360)
+    data['Radius'] = (data[column_name] / 100) * 360
     return data
 
 
