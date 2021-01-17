@@ -41,6 +41,7 @@ class MainWindow(QMainWindow):
         # Setting central widget
         self.general_layout = QGridLayout()
         self.general_layout.setRowMinimumHeight(1, 400)
+        self.general_layout.setColumnMinimumWidth(1, 400)
         self._central_widget = QWidget(self)
         self.setCentralWidget(self._central_widget)
         self._central_widget.setLayout(self.general_layout)

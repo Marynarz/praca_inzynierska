@@ -9,21 +9,14 @@ import pandas as pd
 class BokehCanvas(QWebEngineView):
     def __init__(self):
         super().__init__()
-        self.fig = figure(plot_width=380, plot_height=380)
+        self.fig = figure(plot_width=380, plot_height=320)
         self.x_idx = 0
         self.y_idx = 0
         self.fig.xgrid.visible = False
         self.fig.ygrid.visible = False
         self.plot_type = PlotTypes.D2_CHART
         self.data = ColumnDataSource(pd.DataFrame((0, ), columns=('0', )))
-
-    def show_output(self):
         output_file('bokeh_plot.html', mode='inline')
-        html_str = ''
-        with open('bokeh_plot.html') as f:
-            for line in f.readlines():
-                html_str += line
-        self.setHtml(html_str)
 
     def upload_data(self, data):
         data = data.rename(columns={col: str(col) for col in data.columns})
@@ -41,15 +34,19 @@ class BokehCanvas(QWebEngineView):
             y = self.data.column_names[self.y_idx + 1]
 
         try:
-            self.fig.line(x=x, y=y, source=self.data)
+            if self.plot_type == PlotTypes.D2_CHART:
+                self.fig.line(x=x, y=y, source=self.data)
+            elif self.plot_type == PlotTypes.BAR_CHART:
+                self.fig.vbar(source=self.data, top=y, x=x)
+            elif self.plot_type == PlotTypes.PIE_CHART:
+                pass
+
             save(self.fig)
-            self.show_output()
         except ValueError as e:
             print(e)
 
     def show_plot(self):
         self.prep_plot()
-        output_file('bokeh_plot.html', mode='inline')
         html_str = ''
         with open('bokeh_plot.html') as f:
             for line in f.readlines():
@@ -57,7 +54,7 @@ class BokehCanvas(QWebEngineView):
         self.setHtml(html_str)
 
     def clear_plot(self):
-        pass
+        self.fig.renderers = []
 
     def set_grid_(self, state):
         self.fig.xgrid.visible = state
