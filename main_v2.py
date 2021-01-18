@@ -58,10 +58,10 @@ class MainWindow(QMainWindow):
         self._create_actions()
         self._create_menu()
         self._create_status_bar()
-        self._create_tool_bar()
-        self._create_dock()
         self.data_viewer = data_viewer.DataViewer(parent=self)
         self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
+        self._create_tool_bar()
+        self._create_dock()
         self.load_data()
         self.canvas_controller.set_values('y', 1)
 
@@ -149,14 +149,14 @@ class MainWindow(QMainWindow):
         show_data_btn = QToolButton()
         show_data_btn.setDefaultAction(self.show_data_action)
 
-        plot_type_box = QComboBox()
-        plot_type_box.addItems(str_defs.PLOT_TYPES[self.language])
-        plot_type_box.currentIndexChanged.connect(self.set_plot_type)
+        self.plot_type_box = QComboBox()
+        self.plot_type_box.addItems(str_defs.PLOT_TYPES[self.language])
+        self.plot_type_box.currentIndexChanged.connect(self.data_viewer.set_plot_type)
 
         self.docket_widget.setLayout(dock_layout)
         dock_layout.addWidget(self.set_grid_box)
         dock_layout.addWidget(show_data_btn)
-        dock_layout.addWidget(plot_type_box)
+        dock_layout.addWidget(self.plot_type_box)
 
         self.main_tools_dock.setWidget(self.docket_widget)
 
@@ -225,9 +225,6 @@ class MainWindow(QMainWindow):
 
         self.set_status(str_defs.GRID_SET[self.language].format(not grid))
         self.data_viewer.upd_grid()
-
-    def set_plot_type(self, plot_type):
-        self.canvas_controller.change_plot_type(plot_type + 1)
 
 
 if __name__ == '__main__':

@@ -40,7 +40,7 @@ class PlotLyCanvas(QWebEngineView):
             elif self.plot_type == PlotTypes.BAR_CHART:
                 self.fig = px.bar(self.data, y=y, x=x)
             elif self.plot_type == PlotTypes.PIE_CHART:
-                self.fig = px.pie(self.data, values=x)
+                self.fig = px.pie(self.data, values=y)
             self.fig.update_yaxes(showgrid=self.grid)
             self.fig.update_xaxes(showgrid=self.grid)
         except ValueError as e:

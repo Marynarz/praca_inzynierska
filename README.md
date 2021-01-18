@@ -20,6 +20,10 @@ W celu odpalenia programu należy zainstalować:
 >TBD
 
 ## Jak odpalić
+* **P**ull na repo
+  ```
+  git pull
+  ```
 * **U**twórz środowisko wirtualne
     ```
     mkdir env

@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QTableView, QDockWidget, QWidget, QForm
     QCheckBox, QTabWidget, QVBoxLayout, QPushButton, QGroupBox
 from PyQt5.QtCore import QAbstractTableModel, Qt
 from defs import str_defs, app_defs
+from gui_tools import data_utils
 import pandas as pd
 
 
@@ -33,19 +34,17 @@ class TableModel(QAbstractTableModel):
 class DataViewer(QMainWindow):
     FNAME_TEMPLATE = 'DataViewer.{0!s}'
 
-    def __init__(self, parent=None, data=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
         self.par_ = parent
-        if not data:
-            data = pd.DataFrame((0, 0))
         self.data = pd.DataFrame((0, 0))
+        self.col_idx = self.data.columns[0]
         self.col_names = []
         self.language = self.parent().language
         self.setWindowTitle(str_defs.SHOW_DATA_TITILE[self.language])
         self._prepare_window()
         self._create_dock()
         self.show_data()
-        self.data = pd.DataFrame((0, 0))
         self.parent().log.write_log(app_defs.INFO_MSG,
                                     '{0!s} executed successfully'.format(self.FNAME_TEMPLATE.format('init')))
 
@@ -73,9 +72,9 @@ class DataViewer(QMainWindow):
         self.set_grid_box.setChecked(self.parent().grid)
         self.set_grid_box.stateChanged.connect(self.parent().set_grid)
 
-        plot_type_box = QComboBox()
-        plot_type_box.addItems(str_defs.PLOT_TYPES[self.language])
-        plot_type_box.currentIndexChanged.connect(self.parent().set_plot_type)
+        self.plot_type_box = QComboBox()
+        self.plot_type_box.addItems(str_defs.PLOT_TYPES[self.language])
+        self.plot_type_box.currentIndexChanged.connect(self.set_plot_type)
 
         sort_layout = QVBoxLayout()
         self.sort_items = QComboBox()
@@ -91,7 +90,7 @@ class DataViewer(QMainWindow):
         sort_cont.setLayout(sort_layout)
 
         layout.addWidget(self.set_grid_box)
-        layout.addWidget(plot_type_box)
+        layout.addWidget(self.plot_type_box)
         layout.addWidget(sort_cont)
 
         tab.setLayout(layout)
@@ -155,7 +154,8 @@ class DataViewer(QMainWindow):
 
         try:
             if sort_by != 'index':
-                self.data.sort_values(by=self.data.columns[self.sort_items.currentIndex() - 1], inplace=True)
+                self.data.sort_values(by=self.data.columns[self.sort_items.currentIndex() - 1], inplace=True,
+                                      ignore_index=True)
                 self.parent().log.write_log(app_defs.INFO_MSG,
                                             '%s: all values in dataframe are sorted by {%s}' %
                                             (fname, self.data.columns[self.sort_items.currentIndex() - 1]))
@@ -176,11 +176,11 @@ class DataViewer(QMainWindow):
     def set_y(self):
         y_pos = self.col_names[self.y_column_types.currentIndex()]
         if y_pos != 'index':
-            col_idx = self.y_column_types.currentIndex() - 1
+            self.col_idx = self.y_column_types.currentIndex() - 1
         else:
-            col_idx = -1
+            self.col_idx = -1
 
-        self.parent().canvas_controller.set_values('y', col_idx)
+        self.parent().canvas_controller.set_values('y', self.col_idx)
 
     def set_x(self):
         x_pos = self.col_names[self.x_column_types.currentIndex()]
@@ -190,3 +190,20 @@ class DataViewer(QMainWindow):
             col_idx = -1
 
         self.parent().canvas_controller.set_values('x', col_idx)
+
+    def set_plot_type(self, plot_type):
+        # filtering data for pie chart (negative values are not possible)
+        if plot_type + 1 == app_defs.PlotTypes.PIE_CHART:
+            ret = data_utils.filter_negative_numbers(self.data, self.col_idx)
+            ret = data_utils.dataframe_to_radius(ret, self.col_idx)
+            self.set_data(ret)
+            self.show_data()
+        self.parent().canvas_controller.change_plot_type(plot_type + 1)
+
+        self.plot_type_box.blockSignals(True)
+        self.plot_type_box.setCurrentIndex(plot_type)
+        self.plot_type_box.blockSignals(False)
+
+        self.parent().plot_type_box.blockSignals(True)
+        self.parent().plot_type_box.setCurrentIndex(plot_type)
+        self.parent().plot_type_box.blockSignals(False)
