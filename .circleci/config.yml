@@ -37,5 +37,5 @@ jobs:
           # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
       - run:
           name: Run tests
-          command: python gui_tools/unittest/ut_canvas_controller.py
+          command: python unittest/ut_canvas_controller.py
 
