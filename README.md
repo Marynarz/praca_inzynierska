@@ -19,6 +19,9 @@ W celu odpalenia programu należy zainstalować:
 ## Docs:
 >TBD
 
+## Instalacja
+* pip install -r requirements.txt
+
 ## Jak odpalić
 * **P**ull na repo
   ```
