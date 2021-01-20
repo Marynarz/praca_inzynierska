@@ -1,10 +1,10 @@
 import sys
-sys.path.append('../..')
+sys.path.append('..')
 
 from defs import app_defs
-import unittest
 import os
-from gui_tools import logger
+from gui_tools import logger, unittest
+
 
 class UtLogger(unittest.TestCase):
     def setUp(self):
