@@ -38,17 +38,18 @@ jobs:
       - run:
           name: Canvas controller test
           command: |
-            coverage run tests/ut_canvas_controller.py > tests/reports/canvas_controller.test
+            coverage run tests/ut_canvas_controller.py
             coverage report > tests/reports/coverage/canvas_controller.cov
-      - store_test_results:
-          path: tests/reports
       - run:
           name: Log test
           command: |
-            coverage run tests/ut_logger.py > tests/reports/logger.test
+            coverage run tests/ut_logger.py
             coverage report > tests/reports/coverage/logger.cov
-      - store_test_results:
-          path: tests/reports
+      - run:
+          name: Data Utils test
+          command: |
+            coverage run tests/ut_data_utils.py
+            coverage report > tests/reports/coverage/logger.cov
       - store_artifacts:
           path: tests/reports/coverage
 
