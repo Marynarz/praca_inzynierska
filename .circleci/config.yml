@@ -49,7 +49,7 @@ jobs:
           name: Data Utils test
           command: |
             coverage run tests/ut_data_utils.py
-            coverage report > tests/reports/coverage/logger.cov
+            coverage report > tests/reports/coverage/data_utils.cov
       - store_artifacts:
           path: tests/reports/coverage
 
