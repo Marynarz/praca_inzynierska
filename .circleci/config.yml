@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Canvas controller test
           command: |
-            coverage run -m ut_canvas_controller.py
+            coverage run -m tests/ut_canvas_controller.py
             coverage report
             coverage html
       - store_test_results:
@@ -48,7 +48,7 @@ jobs:
       - run:
           name: Log test
           command: |
-            coverage run ut_logger.py
+            coverage run tests/ut_logger.py
             coverage report
             coverage html
       - store_test_results:
