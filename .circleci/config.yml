@@ -38,8 +38,8 @@ jobs:
       - run:
           name: Canvas controller test
           command: coverage run tests/ut_canvas_controller.py
-            coverage report
-            coverage html
+      - run: coverage report
+      - run: coverage html
       - store_test_results:
           path: test/reports
       - store_artifacts:
@@ -47,8 +47,8 @@ jobs:
       - run:
           name: Log test
           command: coverage run tests/ut_logger.py
-            coverage report
-            coverage html
+      - run: coverage report
+      - run: coverage html
       - store_test_results:
           path: test/reports
       - store_artifacts:
