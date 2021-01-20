@@ -38,11 +38,11 @@ jobs:
       - run:
           name: Canvas controller test
           command: |
-            coverage run -m tests/ut_canvas_controller.py
+            coverage run tests/ut_canvas_controller.py
             coverage report
             coverage html
       - store_test_results:
-          path: test/reports
+          path: tests/reports
       - store_artifacts:
           path: tests/reports
       - run:
@@ -52,7 +52,7 @@ jobs:
             coverage report
             coverage html
       - store_test_results:
-          path: test/reports
+          path: tests/reports
       - store_artifacts:
           path: tests/reports/coverage
 
