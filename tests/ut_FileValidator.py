@@ -1,8 +1,9 @@
 import sys
+import unittest
 sys.path.append('..')
 
 from defs import app_defs
-from gui_tools import FileValidator, unittest
+from gui_tools import FileValidator
 
 
 class FileValidatorTest(unittest.TestCase):

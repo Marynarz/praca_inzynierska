@@ -1,0 +1,7 @@
+[report]
+omit =
+    */env/*
+sort = Cover
+
+[html]
+directory = */tests/reports/
