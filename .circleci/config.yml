@@ -37,18 +37,18 @@ jobs:
           # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
       - run:
           name: Canvas controller test
-          command: coverage run tests/ut_canvas_controller.py
-      - run: coverage report
-      - run: coverage html
+          command: |
+            $HOME/.local/bin/coverage run -m ut_canvas_controller.py
+            $HOME/.local/bin/coverage report
       - store_test_results:
           path: test/reports
       - store_artifacts:
           path: tests/reports
       - run:
           name: Log test
-          command: coverage run tests/ut_logger.py
-      - run: coverage report
-      - run: coverage html
+          command: |
+            $HOME/.local/bin/coverage run ut_logger.py
+            $HOME/.local/bin/coverage report
       - store_test_results:
           path: test/reports
       - store_artifacts:
