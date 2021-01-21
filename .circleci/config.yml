@@ -31,25 +31,40 @@ jobs:
     # CircleCI will report the results back to your VCS provider.
     steps:
       - checkout
+      - restore_cache:  # ensure this step occurs *before* installing dependencies
+          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - python/install-packages:
           pkg-manager: pip
           # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory.
           # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
       - run:
+          command: |  # use pipenv to install dependencies
+            sudo pip install pipenv
+            pipenv install
+      - run:
           name: Canvas controller test
           command: |
-            coverage run tests/ut_canvas_controller.py
-            coverage report > tests/reports/coverage/canvas_controller.cov
+            pipenv run coverage run tests/ut_canvas_controller.py
+            pipenv run coverage report > tests/reports/coverage/canvas_controller.cov
       - run:
           name: Log test
           command: |
-            coverage run tests/ut_logger.py
-            coverage report > tests/reports/coverage/logger.cov
+            pipenv run coverage run tests/ut_logger.py
+            pipenv run coverage report > tests/reports/coverage/logger.cov
       - run:
           name: Data Utils test
           command: |
-            coverage run tests/ut_data_utils.py
-            coverage report > tests/reports/coverage/data_utils.cov
+            pipenv run coverage run tests/ut_data_utils.py
+            pipenv run coverage report > tests/reports/coverage/data_utils.cov
       - store_artifacts:
           path: tests/reports/coverage
+      - store_reports:
+          path: tests/reports
+          
+      - save_cache:
+          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          paths:
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.6/site-packages"
 
