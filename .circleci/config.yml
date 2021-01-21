@@ -50,7 +50,7 @@ jobs:
       - run:
           name: Data Utils test
           command: |
-            python tests/ut_data_utils.py DataUtils
+            python tests/ut_data_utils.py DataUtilsTest
             coverage run tests/ut_data_utils.py
             coverage report > tests/reports/coverage/data_utils.cov
       - store_artifacts:
