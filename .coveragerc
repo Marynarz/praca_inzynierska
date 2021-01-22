@@ -1,9 +1,0 @@
-[report]
-omit =
-    */env/*
-    */tests/*
-    */log/*
-sort = Cover
-
-[html]
-directory = */tests/reports/
