@@ -14,9 +14,6 @@ class FileValidatorTest(unittest.TestCase):
         self.returned_data = ([1, 3, 10, -1], [2, 2, 3, -1])
         self.headers = ['x', 'y']
 
-    def tearDown(self):
-        pass
-
     def test01_init(self):
         test_class = FileValidator.FileValidator('test')
 

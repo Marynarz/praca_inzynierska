@@ -39,7 +39,7 @@ class BokehCanvas(QWebEngineView):
             elif self.plot_type == PlotTypes.BAR_CHART:
                 self.fig.vbar(source=self.data, top=y, x=x)
             elif self.plot_type == PlotTypes.PIE_CHART:
-                pass
+                print('Pie chart not implemented yet')
 
             save(self.fig)
         except ValueError as e:

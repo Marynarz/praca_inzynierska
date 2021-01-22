@@ -14,13 +14,14 @@ import time
 class UtLogger(unittest.TestCase):
     def setUp(self):
         self.log_dir = 'log/unit_test.txt'
+        self.log_header = 'Start logging at: 666 from: unit_test\n'
 
     def tearDown(self):
         os.remove(self.log_dir)
 
     @mock.patch('time.time', mock.MagicMock(return_value=666))
     def test01_logger(self):
-        messages = ['Start logging at: 666 from: unit_test\n',
+        messages = [self.log_header,
                     '%s: Test info message\n' % app_defs.INFO_MSG,
                     '%s: Test warning message\n' % app_defs.WARNING_MSG,
                     '%s: Test error message\n' % app_defs.ERROR_MSG]
@@ -37,11 +38,11 @@ class UtLogger(unittest.TestCase):
 
     @mock.patch('time.time', mock.MagicMock(return_value=666))
     def test02_logger_appending(self):
-        messages = ('Start logging at: 666 from: unit_test\n',
+        messages = (self.log_header,
                     '%s: Test info message\n' % app_defs.INFO_MSG,
                     '%s: Test warning message\n' % app_defs.WARNING_MSG,
                     '%s: Test error message\n' % app_defs.ERROR_MSG,
-                    'Start logging at: 666 from: unit_test\n',
+                    self.log_header,
                     '%s: Appended info message\n' % app_defs.INFO_MSG,
                     '%s: Appended warning message\n' % app_defs.WARNING_MSG,
                     '%s: Appended error message\n' % app_defs.ERROR_MSG)

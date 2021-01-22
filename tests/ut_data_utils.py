@@ -63,13 +63,13 @@ class DataUtilsTest(unittest.TestCase):
 
         for value in test_data:
             with self.assertRaises(TypeError):
-                ret = data_utils.filter_negative_numbers(value)
+                data_utils.filter_negative_numbers(value)
             # Possible AttributeError and TypeError
             with self.assertRaises(Exception):
-                ret = data_utils.percent_to_radius(value, 'S')
+                data_utils.percent_to_radius(value, 'S')
             # Possible AttributeError and TypeError
             with self.assertRaises(Exception):
-                ret = data_utils.dataframe_to_radius(value, 0)
+                data_utils.dataframe_to_radius(value, 0)
 
 
 if __name__ == '__main__':

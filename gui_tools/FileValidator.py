@@ -41,7 +41,7 @@ class FileValidator(object):
             try:
                 first_line = first_line.split(' ')
                 float(first_line[0])
-            except ValueError as e:
+            except ValueError:
                 self.log.write_log(app_defs.INFO_MSG, '%s: file with header. header: %s' % (fname, first_line))
                 header = 0
 
@@ -57,7 +57,7 @@ class FileValidator(object):
             try:
                 first_line = first_line.split(',')
                 float(first_line[0])
-            except ValueError as e:
+            except ValueError:
                 self.log.write_log(app_defs.INFO_MSG, '%s: file with header. header: %s' % (fname, first_line))
                 header = 0
 

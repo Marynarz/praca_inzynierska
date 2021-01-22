@@ -55,7 +55,7 @@ class PlotLyCanvas(QWebEngineView):
         self.show()
 
     def clear_plot(self):
-        pass
+        pass # to be implemented in future
 
     def set_grid_(self, state):
         self.grid = state

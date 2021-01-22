@@ -47,7 +47,7 @@ class MyTestCase(unittest.TestCase):
             self.assertEqual(999, self.canvases[canvas].y_idx)
             self.assertEqual(666, self.canvases[canvas].x_idx)
 
-        with self.assertRaises(ValueError) as e:
+        with self.assertRaises(ValueError):
             test_controller.set_values('wong_value', 999)
 
         # test of clearing up canvases

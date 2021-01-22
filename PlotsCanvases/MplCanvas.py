@@ -64,7 +64,7 @@ class MplCanvas(FigureCanvasQTAgg):
         self.grid = state
 
     def set_line(self):
-        pass
+        pass # to be implemented in future
 
     def set_plot_type(self, type_no):
         self.plot_type = type_no
