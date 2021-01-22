@@ -32,12 +32,17 @@ class CanvasController:
                 self.canvases[canvas].set_y(val_idx)
             elif val_name == 'x':
                 self.canvases[canvas].set_x(val_idx)
+            else:
+                raise ValueError('Wrong value: {0!s}'.format(val_name))
         self.show_plot()
 
     # canvas view block
-    def clear_plot(self):
+    def clear_plot(self, all=False):
         for key in self.canvases:
             self.canvases[key].clear_plot()
+            if all:
+                self.canvases[key].set_y(0)
+                self.canvases[key].set_x(0)
 
     ##
     # @brief show_plot - show updated plot
