@@ -31,8 +31,11 @@ jobs:
     # CircleCI will report the results back to your VCS provider.
     steps:
       - checkout
+<<<<<<< HEAD
       - restore_cache:  # ensure this step occurs *before* installing dependencies
           key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+=======
+>>>>>>> parent of b076035... readme update
       - python/install-packages:
           pkg-manager: pip
           # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory.
@@ -57,6 +60,7 @@ jobs:
           path: tests/reports/coverage
       - store_test_results:
           path: tests/reports
+<<<<<<< HEAD
           
       - save_cache:
           key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
@@ -65,3 +69,5 @@ jobs:
             - "/usr/local/bin"
             - "/usr/local/lib/python3.6/site-packages"
 
+=======
+>>>>>>> parent of b076035... readme update
