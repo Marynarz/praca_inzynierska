@@ -38,19 +38,19 @@ jobs:
       - run:
           name: Canvas controller test
           command: |
-            py.test --junitxml res_canvas_controller.xml tests/ut_canvas_controller.py
+            py.test --junitxml tests/reports/res_canvas_controller.xml tests/ut_canvas_controller.py
             coverage run tests/ut_canvas_controller.py
             coverage report > tests/reports/coverage/canvas_controller.cov
       - run:
           name: Log test
           command: |
-            py.test --junitxml res_log.xml tests/ut_logger.py
+            py.test --junitxml tests/reports/res_log.xml tests/ut_logger.py
             coverage run tests/ut_logger.py
             coverage report > tests/reports/coverage/logger.cov
       - run:
           name: Data Utils test
           command: |
-            py.test --junitxml res_data_utils.xml tests/ut_data_utils.py
+            py.test --junitxml tests/reports/res_data_utils.xml tests/ut_data_utils.py
             coverage run tests/ut_data_utils.py
             coverage report > tests/reports/coverage/data_utils.cov
       - store_artifacts:
