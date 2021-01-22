@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-=======
 import copy
 
 
->>>>>>> parent of b076035... readme update
 ##
 # @brief percent_to_radius - count percent value to radians
 #
@@ -15,12 +12,7 @@ import copy
 #     pandas.Dataframe - counted dataframe                        (pandas.DataFrame)
 #
 def percent_to_radius(data, column_name):
-<<<<<<< HEAD
-    data['Radius'] = (data[column_name] / 100) * 360
-    print(data)
-=======
     data['Radius'] = round((data[column_name] / 100) * 360, 2)
->>>>>>> parent of b076035... readme update
     return data
 
 
@@ -35,14 +27,10 @@ def percent_to_radius(data, column_name):
 #     pandas.Dataframe - counted dataframe                        (pandas.DataFrame)
 #
 def dataframe_to_radius(data, column_idx):
-<<<<<<< HEAD
-    data['Percent'] = (data[data.columns[column_idx]] / data[data.columns[column_idx]].sum()) * 100
-    return percent_to_radius(data, 'Percent')
-=======
+
     ret_data = copy.deepcopy(data)
     ret_data['Percent'] = round((data[data.columns[column_idx]] / data[data.columns[column_idx]].sum()) * 100, 2)
     return percent_to_radius(ret_data, 'Percent')
->>>>>>> parent of b076035... readme update
 
 
 ##
