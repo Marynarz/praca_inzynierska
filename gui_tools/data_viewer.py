@@ -31,38 +31,32 @@ class TableModel(QAbstractTableModel):
         return None
 
 
-class DataViewer(QMainWindow):
+class DataViewer(QTableView):
     FNAME_TEMPLATE = 'DataViewer.{0!s}'
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        print(parent)
         self.par_ = parent
         self.data = pd.DataFrame((0, 0))
         self.col_idx = self.data.columns[0]
         self.col_names = []
         self.language = self.parent().language
-        self.setWindowTitle(str_defs.SHOW_DATA_TITILE[self.language])
-        self._prepare_window()
-        self._create_dock()
         self.show_data()
         self.parent().log.write_log(app_defs.INFO_MSG,
                                     '{0!s} executed successfully'.format(self.FNAME_TEMPLATE.format('init')))
 
-    def _prepare_window(self):
-        self.main_view = QTableView()
-        self.setCentralWidget(self.main_view)
+    def create_dock(self):
+        main_tools_dock = QDockWidget(str_defs.DOCK_TITLE[self.language], self)
+        dock_tabs = QTabWidget()
 
-    def _create_dock(self):
-        self.main_tools_dock = QDockWidget(str_defs.DOCK_TITLE[self.language], self)
-        self.dock_tabs = QTabWidget()
+        dock_tabs.addTab(self._create_tab_overall(), str_defs.OVRALL[self.language])
+        dock_tabs.addTab(self._create_tab_x(), 'X')
+        dock_tabs.addTab(self._create_tab_y(), 'Y')
 
-        self.dock_tabs.addTab(self._create_tab_overall(), str_defs.OVRALL[self.language])
-        self.dock_tabs.addTab(self._create_tab_x(), 'X')
-        self.dock_tabs.addTab(self._create_tab_y(), 'Y')
+        main_tools_dock.setWidget(dock_tabs)
 
-        self.main_tools_dock.setWidget(self.dock_tabs)
-
-        self.addDockWidget(Qt.RightDockWidgetArea, self.main_tools_dock)
+        return main_tools_dock
 
     def _create_tab_overall(self):
         tab = QWidget()
@@ -171,7 +165,7 @@ class DataViewer(QMainWindow):
 
     def show_data(self):
         model = TableModel(data=self.data)
-        self.main_view.setModel(model)
+        self.setModel(model)
 
     def set_y(self):
         y_pos = self.col_names[self.y_column_types.currentIndex()]

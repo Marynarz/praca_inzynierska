@@ -32,11 +32,14 @@ class TabsView(QMainWindow):
         for canvas in self.canvases:
             self._central_widget.addTab(self.canvases[canvas], canvas)
 
+        self.data_viewer = data_viewer.DataViewer(parent=self)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.data_viewer.create_dock())
+        self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
+        self._central_widget.addTab(self.data_viewer, str_defs.SHOW_DATA[self.language])
+
         self._create_actions()
         self._create_menu()
         self._create_status_bar()
-        self.data_viewer = data_viewer.DataViewer(parent=self)
-        self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
         self._create_tool_bar()
         self._create_dock()
         self.load_data()
@@ -108,13 +111,9 @@ class TabsView(QMainWindow):
         self.lang_eng_action = QAction(str_defs.ENGLISH[self.language], self)
         self.lang_eng_action.triggered.connect(lambda: self.set_lang(str_defs.LANG_ENG))
 
-        self.show_data_action = QAction(str_defs.SHOW_DATA[self.language], self)
-        self.show_data_action.triggered.connect(self.show_data_app)
-
     def _create_tool_bar(self):
         tools_toolbar = QToolBar('Tools')
         tools_toolbar.addAction(self.file_open)
-        tools_toolbar.addAction(self.show_data_action)
         tools_toolbar.setFloatable(False)
         tools_toolbar.setMovable(False)
 
@@ -130,24 +129,17 @@ class TabsView(QMainWindow):
         self.set_grid_box.setChecked(self.grid)
         self.set_grid_box.stateChanged.connect(self.set_grid)
 
-        show_data_btn = QToolButton()
-        show_data_btn.setDefaultAction(self.show_data_action)
-
         self.plot_type_box = QComboBox()
         self.plot_type_box.addItems(str_defs.PLOT_TYPES[self.language])
         self.plot_type_box.currentIndexChanged.connect(self.data_viewer.set_plot_type)
 
         self.docket_widget.setLayout(dock_layout)
         dock_layout.addWidget(self.set_grid_box)
-        dock_layout.addWidget(show_data_btn)
         dock_layout.addWidget(self.plot_type_box)
 
         self.main_tools_dock.setWidget(self.docket_widget)
 
         self.addDockWidget(Qt.RightDockWidgetArea, self.main_tools_dock)
-
-    def show_data_app(self):
-        self.data_viewer.show()
 
     def set_status(self, status):
         self.status.showMessage(status, app_defs.STATUS_TIMEOUT)
