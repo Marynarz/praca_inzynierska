@@ -1,7 +1,7 @@
 import matplotlib
 matplotlib.use('Qt5Agg')
 from PyQt5 import QtWidgets
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 from matplotlib.figure import Figure
 from defs.app_defs import PlotTypes
 import pandas as pd
@@ -13,8 +13,8 @@ class MplCanvas(FigureCanvasQTAgg):
         self.data = pd.DataFrame((0, 0))
         self.now_x = []
         self.now_y = []
-        self.x_idx = 0
-        self.y_idx = 0
+        self.x_idx = 1
+        self.y_idx = 1
         self.plot_type = PlotTypes.D2_CHART
         self.dpi = 100
         figure = Figure(figsize=(10, 10), dpi=self.dpi)
@@ -23,7 +23,6 @@ class MplCanvas(FigureCanvasQTAgg):
         self.setParent(parent)
         self.grid = grid
         self.clear_plot()
-        self.prep_data()
         self.show_plot()
 
         FigureCanvasQTAgg.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -32,28 +31,14 @@ class MplCanvas(FigureCanvasQTAgg):
     def upload_data(self, data):
         self.data = data
 
-    def prep_data(self):
-        columns = self.data.columns.tolist()
-
-        if self.x_idx == -1:
-            self.now_x = self.data.index.tolist()
-        else:
-            self.now_x = self.data[columns[self.x_idx]].tolist()
-
-        if self.y_idx == -1:
-            self.now_y = self.data.index.tolist()
-        else:
-            self.now_y = self.data[columns[self.y_idx]].tolist()
-
     def show_plot(self):
-        self.prep_data()
         if self.plot_type == PlotTypes.D2_CHART:
-            self.axes.plot(self.now_x, self.now_y)
+            self.data.plot(ax=self.axes,)
         elif self.plot_type == PlotTypes.BAR_CHART:
-            self.axes.bar(self.now_x, self.now_y)
+            self.data.plot.bar(ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name)
         elif self.plot_type == PlotTypes.PIE_CHART:
             self._check_validate_y()
-            self.axes.pie(x=self.pie_data, labels=range(len(self.pie_data)))
+            self.data.plot.pie(ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name)
         self.axes.grid(self.grid)
         self.draw()
 
@@ -77,3 +62,6 @@ class MplCanvas(FigureCanvasQTAgg):
 
     def set_y(self, y_idx):
         self.y_idx = y_idx
+
+    def create_toolbar(self, parent):
+        return NavigationToolbar2QT(self, parent)
