@@ -1,69 +1,67 @@
-import sys
-
-from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, QWidget, QAction, QFileDialog,\
-    QMessageBox, QVBoxLayout, QLabel, QToolBar, QDockWidget, QCheckBox, QFormLayout, QToolButton, QComboBox,\
-    QGroupBox
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QAction, QDockWidget, QWidget, QFormLayout, QCheckBox, QToolButton, \
+    QComboBox, QMessageBox, QFileDialog, QToolBar, QVBoxLayout, QGroupBox, QGridLayout, QTabWidget
 from PyQt5.QtCore import QSettings, Qt
-from defs import str_defs, app_defs
-from gui_tools import logger, FileValidator, data_viewer, canvas_controller
-from PlotsCanvases import MplCanvas, PyQtGraphCanvas, BokehCanvas, PlotLyCanvas
 
+from PlotsCanvases import MplCanvas, PyQtGraphCanvas, PlotLyCanvas, BokehCanvas
+from defs import app_defs, str_defs
+from gui_tools import FileValidator, data_viewer, canvas_controller, logger
 import pandas as pd
 
 
-class MainWindow(QMainWindow):
+class TabsView(QMainWindow):
+    FNAME_LOG_STR = 'TabsView.{0!s}'
+
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.log = logger.Logger('main_gui')
+        self.re_write_log = False
+
+        self._setting_up()
+
+        self.log.write_log(app_defs.INFO_MSG, 'Hello main gui\t--\tV2.00')
+        self.log.write_log(app_defs.ERROR_MSG, 'lang: %s, type: %s' % (self.language, type(self.language)))
+        self.setWindowTitle(str_defs.MAIN_WINDOW_TITLE[self.language])
+
         # Canvas container
+        self._prep_canvases()
+
+        # Setting central widget
+        self._central_widget = QTabWidget()
+        self.setCentralWidget(self._central_widget)
+
+        for canvas in self.canvases:
+            self._central_widget.addTab(self.canvases[canvas], canvas)
+
+        self.data_viewer = data_viewer.DataViewer(parent=self, language=self.language, log=self.log,
+                                                  canvas_controller=self.canvas_controller)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.data_viewer.create_dock())
+        self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
+        self._central_widget.addTab(self.data_viewer, str_defs.SHOW_DATA[self.language])
+
+        self._create_actions()
+        self._create_menu()
+        self._create_status_bar()
+        self._create_tool_bar()
+        self.load_data()
+        self.canvas_controller.set_values('y', 1)
+
+    def _prep_canvases(self):
+        self.log.write_log(app_defs.FUNIN_MSG, self.FNAME_LOG_STR.format('_prep_canvases'))
         self.canvases = {app_defs.MATPLOTLIB: MplCanvas(parent=self, grid=False),
                          app_defs.PYQTGRAPH: PyQtGraphCanvas(),
                          app_defs.PLOTLY: PlotLyCanvas(),
                          app_defs.BOKEH: BokehCanvas()}
         self.canvas_controller = canvas_controller.CanvasController(self.canvases)
         self.grid = False
+        self.log.write_log(app_defs.FUNOUT_MSG, self.FNAME_LOG_STR.format('_prep_canvases'))
 
-        self.log = logger.Logger('main_gui')
-        self.re_write_log = False
-
+    def _setting_up(self):
         self.settings = QSettings('wnie', 'praca_inzynierska')
         if self.settings.contains('lang'):
             self.language = self.settings.value('lang')
         else:
             # default english
             self.language = str_defs.LANG_ENG
-
-        self.log.write_log(app_defs.INFO_MSG, 'Hello main gui\t--\tV2.00')
-        self.log.write_log(app_defs.ERROR_MSG, 'lang: %s, type: %s' % (self.language, type(self.language)))
-        self.setWindowTitle(str_defs.MAIN_WINDOW_TITLE[self.language])
-
-        self._create_canvases_layouts()
-
-        # Setting central widget
-        self.general_layout = QGridLayout()
-        self.general_layout.setRowMinimumHeight(1, 400)
-        self.general_layout.setColumnMinimumWidth(1, 400)
-        self._central_widget = QWidget(self)
-        self.setCentralWidget(self._central_widget)
-        self._central_widget.setLayout(self.general_layout)
-
-        x, y = 0, 0
-        for layout in self.layouts:
-            self.general_layout.addWidget(layout, x, y)
-            if y == 1:
-                y = 0
-                x += 1
-            else:
-                y += 1
-
-        self._create_actions()
-        self._create_menu()
-        self._create_status_bar()
-        self.data_viewer = data_viewer.DataViewer(parent=self)
-        self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
-        self._create_tool_bar()
-        self._create_dock()
-        self.load_data()
-        self.canvas_controller.set_values('y', 1)
 
     def _create_menu(self):
         self.log.write_log(app_defs.INFO_MSG, 'Creating menus')
@@ -95,17 +93,6 @@ class MainWindow(QMainWindow):
         self.set_status('OK')
         self.setStatusBar(self.status)
 
-    def _create_canvases_layouts(self):
-        self.log.write_log(app_defs.INFO_MSG, 'Creating canvases layouts')
-        # setting layouts
-        self.layouts = []
-        for key in self.canvases:
-            group_box = QGroupBox(app_defs.CANVAS_NAME[key])
-            layout = QVBoxLayout()
-            layout.addWidget(self.canvases[key])
-            group_box.setLayout(layout)
-            self.layouts.append(group_box)
-
     def _create_actions(self):
         self.file_open = QAction(str_defs.FILE_OPEN[self.language], self)
         self.file_open.setShortcut('Ctrl+O')
@@ -124,46 +111,13 @@ class MainWindow(QMainWindow):
         self.lang_eng_action = QAction(str_defs.ENGLISH[self.language], self)
         self.lang_eng_action.triggered.connect(lambda: self.set_lang(str_defs.LANG_ENG))
 
-        self.show_data_action = QAction(str_defs.SHOW_DATA[self.language], self)
-        self.show_data_action.triggered.connect(self.show_data_app)
-
     def _create_tool_bar(self):
         tools_toolbar = QToolBar('Tools')
         tools_toolbar.addAction(self.file_open)
-        tools_toolbar.addAction(self.show_data_action)
         tools_toolbar.setFloatable(False)
         tools_toolbar.setMovable(False)
 
         self.addToolBar(tools_toolbar)
-
-    def _create_dock(self):
-        self.log.write_log(app_defs.INFO_MSG, 'Creating Dock')
-        self.main_tools_dock = QDockWidget(str_defs.DOCK_TITLE[self.language], self)
-        self.docket_widget = QWidget()
-        dock_layout = QFormLayout()
-
-        self.set_grid_box = QCheckBox(str_defs.GRID[self.language], self)
-        self.set_grid_box.setChecked(self.grid)
-        self.set_grid_box.stateChanged.connect(self.set_grid)
-
-        show_data_btn = QToolButton()
-        show_data_btn.setDefaultAction(self.show_data_action)
-
-        self.plot_type_box = QComboBox()
-        self.plot_type_box.addItems(str_defs.PLOT_TYPES[self.language])
-        self.plot_type_box.currentIndexChanged.connect(self.data_viewer.set_plot_type)
-
-        self.docket_widget.setLayout(dock_layout)
-        dock_layout.addWidget(self.set_grid_box)
-        dock_layout.addWidget(show_data_btn)
-        dock_layout.addWidget(self.plot_type_box)
-
-        self.main_tools_dock.setWidget(self.docket_widget)
-
-        self.addDockWidget(Qt.RightDockWidgetArea, self.main_tools_dock)
-
-    def show_data_app(self):
-        self.data_viewer.show()
 
     def set_status(self, status):
         self.status.showMessage(status, app_defs.STATUS_TIMEOUT)
@@ -173,13 +127,13 @@ class MainWindow(QMainWindow):
         pass
 
     def exit_app(self, rc=0):
-        #QApplication.exit(return_code)
+        # QApplication.exit(return_code)
         pass
 
     def set_lang(self, lang):
         self.log.write_log(app_defs.WARNING_MSG, 'Language set to: {0!s}. Manual action needed!'.format(lang))
         self.settings.setValue('lang', lang)
-        self.set_status('Lang set to '+lang)
+        self.set_status('Lang set to ' + lang)
 
     def open_file_window(self):
         self.set_status('Open file')
@@ -212,29 +166,3 @@ class MainWindow(QMainWindow):
 
     def load_data(self):
         self.canvas_controller.upload_data(data=self.data_viewer.get_data())
-
-    def set_grid(self):
-        grid = self.canvas_controller.grid
-        self.log.write_log(app_defs.INFO_MSG, 'grid set to {0}'.format(not grid))
-
-        self.canvas_controller.set_grid()
-
-        self.set_grid_box.blockSignals(True)
-        self.set_grid_box.setChecked(not grid)
-        self.set_grid_box.blockSignals(False)
-
-        self.set_status(str_defs.GRID_SET[self.language].format(not grid))
-        self.data_viewer.upd_grid()
-
-
-if __name__ == '__main__':
-    print('DEPRECATED!')
-    #return_code = app_defs.REBOOT_APP
-
-    #while return_code == app_defs.REBOOT_APP:
-        #app = QApplication(sys.argv)
-        #main = MainWindow()
-        #main.show()
-        #return_code = app.exec()
-
-    sys.exit(0)
