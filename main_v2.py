@@ -228,12 +228,13 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
-    return_code = app_defs.REBOOT_APP
+    print('DEPRECATED!')
+    #return_code = app_defs.REBOOT_APP
 
-    while return_code == app_defs.REBOOT_APP:
-        app = QApplication(sys.argv)
-        main = MainWindow()
-        main.show()
-        return_code = app.exec()
+    #while return_code == app_defs.REBOOT_APP:
+        #app = QApplication(sys.argv)
+        #main = MainWindow()
+        #main.show()
+        #return_code = app.exec()
 
-    sys.exit(return_code)
+    sys.exit(0)
