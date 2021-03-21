@@ -4,7 +4,7 @@ from PyQt5.QtCore import QSettings, Qt
 
 from PlotsCanvases import MplCanvas, PyQtGraphCanvas, PlotLyCanvas, BokehCanvas
 from defs import app_defs, str_defs
-from gui_tools import FileValidator, data_viewer, canvas_controller, logger
+from gui_tools import FileValidator, data_viewer, canvas_controller, logger, json_url_loader
 import pandas as pd
 
 
@@ -34,6 +34,7 @@ class TabsView(QMainWindow):
 
         self.data_viewer = data_viewer.DataViewer(parent=self, language=self.language, log=self.log,
                                                   canvas_controller=self.canvas_controller)
+        self.json_loader = json_url_loader.JsonUrlOpen(self.data_viewer)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.data_viewer.create_dock())
         self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
         self._central_widget.addTab(self.data_viewer, str_defs.SHOW_DATA[self.language])
@@ -72,6 +73,7 @@ class TabsView(QMainWindow):
 
         # open file
         self.menu.addAction(self.file_open)
+        self.menu.addAction(self.json_loader_action)
 
         # exit section
         self.menu.addSeparator()
@@ -110,6 +112,9 @@ class TabsView(QMainWindow):
 
         self.lang_eng_action = QAction(str_defs.ENGLISH[self.language], self)
         self.lang_eng_action.triggered.connect(lambda: self.set_lang(str_defs.LANG_ENG))
+
+        self.json_loader_action = QAction("Load Json", self)
+        self.json_loader_action.triggered.connect(self.open_json)
 
     def _create_tool_bar(self):
         tools_toolbar = QToolBar('Tools')
@@ -163,6 +168,9 @@ class TabsView(QMainWindow):
 
         if not self.re_write_log:
             self.re_write_log = True
+
+    def open_json(self):
+        self.json_loader.show()
 
     def load_data(self):
         self.canvas_controller.upload_data(data=self.data_viewer.get_data())
