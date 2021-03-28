@@ -34,7 +34,7 @@ class TabsView(QMainWindow):
 
         self.data_viewer = data_viewer.DataViewer(parent=self, language=self.language, log=self.log,
                                                   canvas_controller=self.canvas_controller)
-        self.json_loader = json_url_loader.JsonUrlOpen(self.data_viewer)
+        self.json_loader = json_url_loader.JsonUrlOpen(self.data_viewer, self.language)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.data_viewer.create_dock())
         self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
         self._central_widget.addTab(self.data_viewer, str_defs.SHOW_DATA[self.language])

@@ -39,3 +39,17 @@ GRID_SET = {LANG_PL: 'Siatka ustawiona do {0}', LANG_ENG: 'Grid set to {0}'}
 OVRALL = {LANG_PL: 'Ogólne', LANG_ENG: 'Overall'}
 SORT = {LANG_PL: 'Sortuj', LANG_ENG: 'Sort'}
 SORT_TOOL = {LANG_PL: 'Narzędzia sortowania', LANG_ENG: 'Sorting tools'}
+
+# JsonUrlOpen
+WRONG_URL_TITLE = {LANG_PL: 'Błędny adres', LANG_ENG: 'Wrong url'}
+WRONG_URL_MAIN = {LANG_PL: 'Weryfikacja adresu się nie powiodła', LANG_ENG: 'Url validation not passed'}
+WRONG_URL_ADDITIONAL = {LANG_PL: '{0} jest błędny', LANG_ENG: '{0} is not valid url'}
+
+URL_NOT_WORK_TITLE = {LANG_PL: 'Adres nie działa', LANG_ENG: 'Url not working'}
+URL_NOT_WORK_MAIN = {LANG_PL: 'Adres nie działa poprawnie', LANG_ENG: 'Your url not working properly'}
+URL_NOT_WORK_ADDITIONAL = {LANG_PL: 'Sprawdź czy adres jest poprawny', LANG_ENG: 'Double check address'}
+
+URL_TITLE = {LANG_PL: 'Załaduj plik JSON', LANG_ENG: 'Load JSON file'}
+URL_LINE_EDIT = {LANG_PL: 'Tutaj wpisz adres', LANG_ENG: 'Type url here'}
+URL_LINE_LABEL = 'URL: '
+URL_BTN_LABEL = {LANG_PL: 'Wgraj', LANG_ENG: 'Load'}
