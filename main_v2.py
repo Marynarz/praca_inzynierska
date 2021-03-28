@@ -1,7 +1,7 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QGridLayout, QWidget, QAction, QFileDialog,\
-    QMessageBox, QVBoxLayout, QLabel, QToolBar, QDockWidget, QCheckBox, QFormLayout, QToolButton, QComboBox,\
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QGridLayout, QWidget, QAction, QFileDialog,\
+    QMessageBox, QVBoxLayout, QToolBar, QDockWidget, QCheckBox, QFormLayout, QToolButton, QComboBox,\
     QGroupBox
 from PyQt5.QtCore import QSettings, Qt
 from defs import str_defs, app_defs
@@ -229,12 +229,4 @@ class MainWindow(QMainWindow):
 
 if __name__ == '__main__':
     print('DEPRECATED!')
-    #return_code = app_defs.REBOOT_APP
-
-    #while return_code == app_defs.REBOOT_APP:
-        #app = QApplication(sys.argv)
-        #main = MainWindow()
-        #main.show()
-        #return_code = app.exec()
-
     sys.exit(0)
