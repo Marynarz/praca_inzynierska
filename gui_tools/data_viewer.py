@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QTableView, QDockWidget, QWidget, QFormLayout, QComboBox,\
-    QCheckBox, QTabWidget, QVBoxLayout, QPushButton, QGroupBox
+    QCheckBox, QTabWidget, QVBoxLayout, QPushButton, QGroupBox, QLineEdit
 from PyQt5.QtCore import QAbstractTableModel, Qt
 from defs import str_defs, app_defs
 from gui_tools import data_utils, logger
@@ -36,7 +36,6 @@ class DataViewer(QTableView):
 
     def __init__(self, parent=None, **kwargs):
         super().__init__(parent)
-        print(parent)
         self.par_ = parent
         self.grid = False
         self.data = pd.DataFrame((0, 0))
@@ -68,14 +67,17 @@ class DataViewer(QTableView):
         tab = QWidget()
         layout = QFormLayout()
 
+        # set grid for all plots
         self.set_grid_box = QCheckBox(str_defs.GRID[self.language], self)
         self.set_grid_box.setChecked(self.grid)
         self.set_grid_box.stateChanged.connect(self.set_grid)
-
+        
+        # set plot type
         self.plot_type_box = QComboBox()
         self.plot_type_box.addItems(str_defs.PLOT_TYPES[self.language])
         self.plot_type_box.currentIndexChanged.connect(self.set_plot_type)
 
+        # sort data
         sort_layout = QVBoxLayout()
         self.sort_items = QComboBox()
         self.sort_items.addItems(self.col_names)
@@ -89,9 +91,41 @@ class DataViewer(QTableView):
         sort_layout.addWidget(sort_btn)
         sort_cont.setLayout(sort_layout)
 
+        # add texts
+        text_manipulators = QGroupBox(str_defs.TEXT_MANIPULTORS[self.language])
+        text_manipulators_layout = QFormLayout()
+
+        # add title
+        title = QGroupBox(str_defs.TITLE_ADD[self.language])
+        title_layout = QFormLayout()
+        
+        self.title_input = QLineEdit()
+        title_set = QPushButton(str_defs.SET_STR[self.language])
+        title_set.clicked.connect(self.set_title)
+        
+        title_layout.addRow(self.title_input)
+        title_layout.addRow(title_set)
+        title.setLayout(title_layout)
+
+        # add x labels
+        x_axis = QGroupBox(str_defs.X_AXIS_LABELS[self.language])
+        x_axis_layout = QFormLayout()
+        
+        x_axis_items = QComboBox()
+        x_axis_items.addItems(self.col_names)
+
+        x_axis_layout.addRow(x_axis_items)
+        x_axis.setLayout(x_axis_layout)
+
+        # texts layout
+        text_manipulators_layout.addRow(title)
+        text_manipulators_layout.addRow(x_axis)
+        text_manipulators.setLayout(text_manipulators_layout)
+
         layout.addWidget(self.plot_type_box)
-        layout.addWidget(sort_cont)
         layout.addWidget(self.set_grid_box)
+        layout.addWidget(sort_cont)
+        layout.addWidget(text_manipulators)
 
         tab.setLayout(layout)
         return tab
@@ -214,3 +248,8 @@ class DataViewer(QTableView):
         self.set_grid_box.blockSignals(False)
 
         self.data_viewer.upd_grid()
+
+    def set_title(self):
+        self.log.write_log(app_defs.INFO_MSG, 'Set plot title: {0}'.format(self.title_input.text()))
+        self.par_.set_status('Set plot title: {0}'.format(self.title_input.text()))
+        self.canvas_controller.set_title(self.title_input.text())

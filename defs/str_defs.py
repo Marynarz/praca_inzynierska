@@ -39,6 +39,9 @@ GRID_SET = {LANG_PL: 'Siatka ustawiona do {0}', LANG_ENG: 'Grid set to {0}'}
 OVRALL = {LANG_PL: 'Ogólne', LANG_ENG: 'Overall'}
 SORT = {LANG_PL: 'Sortuj', LANG_ENG: 'Sort'}
 SORT_TOOL = {LANG_PL: 'Narzędzia sortowania', LANG_ENG: 'Sorting tools'}
+TEXT_MANIPULTORS = {LANG_PL: 'Etykiety', LANG_ENG: 'Labels'}
+TITLE_ADD = {LANG_PL: 'Tytuł', LANG_ENG:'Title'}
+X_AXIS_LABELS = {LANG_PL: 'Oś X', LANG_ENG: 'X axis'}
 
 # JsonUrlOpen
 WRONG_URL_TITLE = {LANG_PL: 'Błędny adres', LANG_ENG: 'Wrong url'}
@@ -53,3 +56,6 @@ URL_TITLE = {LANG_PL: 'Załaduj plik JSON', LANG_ENG: 'Load JSON file'}
 URL_LINE_EDIT = {LANG_PL: 'Tutaj wpisz adres', LANG_ENG: 'Type url here'}
 URL_LINE_LABEL = 'URL: '
 URL_BTN_LABEL = {LANG_PL: 'Wgraj', LANG_ENG: 'Load'}
+
+# Overall
+SET_STR = {LANG_PL: 'Ustaw', LANG_ENG: 'Set'}

@@ -11,6 +11,7 @@ class MplCanvas(FigureCanvasQTAgg):
 
     def __init__(self, parent=None, grid=False):
         self.data = pd.DataFrame((0, 0))
+        self.title = ''
         self.now_x = []
         self.now_y = []
         self.x_idx = 1
@@ -32,13 +33,14 @@ class MplCanvas(FigureCanvasQTAgg):
         self.data = data
 
     def show_plot(self):
+        self.clear_plot()
         if self.plot_type == PlotTypes.D2_CHART:
-            self.data.plot(ax=self.axes,)
+            self.data.plot(ax=self.axes, title=self.title)
         elif self.plot_type == PlotTypes.BAR_CHART:
-            self.data.plot.bar(ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name)
+            self.data.plot.bar(ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name, title=self.title)
         elif self.plot_type == PlotTypes.PIE_CHART:
             self._check_validate_y()
-            self.data.plot.pie(ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name)
+            self.data.plot.pie(ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name, title=self.title)
         self.axes.grid(self.grid)
         self.draw()
 
@@ -65,3 +67,7 @@ class MplCanvas(FigureCanvasQTAgg):
 
     def create_toolbar(self, parent):
         return NavigationToolbar2QT(self, parent)
+
+    def set_title(self, text=''):
+        self.title = text
+        #self.axes.set_title(self.title)

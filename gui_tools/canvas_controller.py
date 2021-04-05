@@ -66,3 +66,8 @@ class CanvasController:
         for key in self.canvases:
             self.canvases[key].set_plot_type(type_no)
         self.show_plot()
+
+    def set_title(self, text):
+        for key in self.canvases:
+            self.canvases[key].set_title(text)
+        self.show_plot()

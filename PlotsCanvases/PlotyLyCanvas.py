@@ -8,6 +8,7 @@ from defs.app_defs import PlotTypes
 class PlotLyCanvas(QWebEngineView):
     def __init__(self):
         super().__init__()
+        self.title = ''
         self.x_idx = 0
         self.y_idx = 0
         self.grid = False
@@ -36,11 +37,11 @@ class PlotLyCanvas(QWebEngineView):
 
         try:
             if self.plot_type == PlotTypes.D2_CHART:
-                self.fig = px.line(self.data, y=y, x=x)
+                self.fig = px.line(self.data, y=y, x=x, title=self.title)
             elif self.plot_type == PlotTypes.BAR_CHART:
-                self.fig = px.bar(self.data, y=y, x=x)
+                self.fig = px.bar(self.data, y=y, x=x, title=self.title)
             elif self.plot_type == PlotTypes.PIE_CHART:
-                self.fig = px.pie(self.data, values=y)
+                self.fig = px.pie(self.data, values=y, title=self.title)
             self.fig.update_yaxes(showgrid=self.grid)
             self.fig.update_xaxes(showgrid=self.grid)
         except ValueError as e:
@@ -68,3 +69,6 @@ class PlotLyCanvas(QWebEngineView):
 
     def set_y(self, y_idx):
         self.y_idx = y_idx
+
+    def set_title(self, text=''):
+        self.title = text

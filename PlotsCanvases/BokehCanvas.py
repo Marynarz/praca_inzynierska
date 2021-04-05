@@ -10,6 +10,7 @@ class BokehCanvas(QWebEngineView):
     def __init__(self):
         super().__init__()
         self.fig = figure(plot_width=380, plot_height=320)
+        self.title = ''
         self.x_idx = 0
         self.y_idx = 0
         self.fig.xgrid.visible = False
@@ -34,6 +35,7 @@ class BokehCanvas(QWebEngineView):
             y = self.data.column_names[self.y_idx + 1]
 
         try:
+            self.fig.title = self.title
             if self.plot_type == PlotTypes.D2_CHART:
                 self.fig.line(x=x, y=y, source=self.data)
             elif self.plot_type == PlotTypes.BAR_CHART:
@@ -68,3 +70,6 @@ class BokehCanvas(QWebEngineView):
 
     def set_y(self, y_idx):
         self.y_idx = y_idx
+
+    def set_title(self, text):
+        self.title = text
