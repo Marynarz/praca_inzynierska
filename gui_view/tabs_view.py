@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QStatusBar, QAction, QDockWidget, QWidget, QFormLayout, QCheckBox, QToolButton, \
-    QComboBox, QMessageBox, QFileDialog, QToolBar, QVBoxLayout, QGroupBox, QGridLayout, QTabWidget
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QAction, QMessageBox, QFileDialog, QToolBar, QTabWidget
 from PyQt5.QtCore import QSettings, Qt
 
 from PlotsCanvases import MplCanvas, PyQtGraphCanvas, PlotLyCanvas, BokehCanvas

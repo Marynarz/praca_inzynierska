@@ -73,3 +73,6 @@ class BokehCanvas(QWebEngineView):
 
     def set_title(self, text):
         self.title = text
+
+    def show_histogram(self):
+        print('To be implemented')

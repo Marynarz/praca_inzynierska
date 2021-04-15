@@ -71,3 +71,8 @@ class CanvasController:
         for key in self.canvases:
             self.canvases[key].set_title(text)
         self.show_plot()
+
+    def show_hist(self):
+        for key in self.canvases:
+            self.canvases[key].show_histogram()
+        self.show_plot()

@@ -12,6 +12,7 @@ class MplCanvas(FigureCanvasQTAgg):
     def __init__(self, parent=None, grid=False):
         self.data = pd.DataFrame((0, 0))
         self.title = ''
+        self.histogram = False
         self.now_x = []
         self.now_y = []
         self.x_idx = 1
@@ -36,6 +37,8 @@ class MplCanvas(FigureCanvasQTAgg):
         self.clear_plot()
         if self.plot_type == PlotTypes.D2_CHART:
             self.data.plot(ax=self.axes, title=self.title)
+            if self.histogram:
+                self.data.hist()
         elif self.plot_type == PlotTypes.BAR_CHART:
             self.data.plot.bar(ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name, title=self.title)
         elif self.plot_type == PlotTypes.PIE_CHART:
@@ -70,4 +73,6 @@ class MplCanvas(FigureCanvasQTAgg):
 
     def set_title(self, text=''):
         self.title = text
-        #self.axes.set_title(self.title)
+
+    def show_histogram(self):
+        self.histogram = not self.histogram

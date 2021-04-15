@@ -91,6 +91,23 @@ class DataViewer(QTableView):
         sort_layout.addWidget(sort_btn)
         sort_cont.setLayout(sort_layout)
 
+        # show histogram
+        show_hist_btn = QPushButton('Histogram')
+        show_hist_btn.clicked.connect(self.canvas_controller.show_hist)
+
+        text_manipulators = self._title_manipulators()
+
+        layout.addWidget(self.plot_type_box)
+        layout.addWidget(self.set_grid_box)
+        layout.addWidget(sort_cont)
+        layout.addWidget(show_hist_btn)
+
+        layout.addWidget(text_manipulators)
+
+        tab.setLayout(layout)
+        return tab
+
+    def _title_manipulators(self):
         # add texts
         text_manipulators = QGroupBox(str_defs.TEXT_MANIPULTORS[self.language])
         text_manipulators_layout = QFormLayout()
@@ -98,11 +115,11 @@ class DataViewer(QTableView):
         # add title
         title = QGroupBox(str_defs.TITLE_ADD[self.language])
         title_layout = QFormLayout()
-        
+
         self.title_input = QLineEdit()
         title_set = QPushButton(str_defs.SET_STR[self.language])
         title_set.clicked.connect(self.set_title)
-        
+
         title_layout.addRow(self.title_input)
         title_layout.addRow(title_set)
         title.setLayout(title_layout)
@@ -110,7 +127,7 @@ class DataViewer(QTableView):
         # add x labels
         x_axis = QGroupBox(str_defs.X_AXIS_LABELS[self.language])
         x_axis_layout = QFormLayout()
-        
+
         x_axis_items = QComboBox()
         x_axis_items.addItems(self.col_names)
 
@@ -122,13 +139,7 @@ class DataViewer(QTableView):
         text_manipulators_layout.addRow(x_axis)
         text_manipulators.setLayout(text_manipulators_layout)
 
-        layout.addWidget(self.plot_type_box)
-        layout.addWidget(self.set_grid_box)
-        layout.addWidget(sort_cont)
-        layout.addWidget(text_manipulators)
-
-        tab.setLayout(layout)
-        return tab
+        return text_manipulators
 
     def _create_tab_y(self):
         tab_y = QWidget()

@@ -11,6 +11,7 @@ class PlotLyCanvas(QWebEngineView):
         self.title = ''
         self.x_idx = 0
         self.y_idx = 0
+        self.histogram = False
         self.grid = False
         self.plot_type = PlotTypes.D2_CHART
         self.data = pd.DataFrame((0, ), index=(0, ))
@@ -38,6 +39,8 @@ class PlotLyCanvas(QWebEngineView):
         try:
             if self.plot_type == PlotTypes.D2_CHART:
                 self.fig = px.line(self.data, y=y, x=x, title=self.title)
+                if self.histogram:
+                    self.fig = px.histogram(self.data, nbins=10)
             elif self.plot_type == PlotTypes.BAR_CHART:
                 self.fig = px.bar(self.data, y=y, x=x, title=self.title)
             elif self.plot_type == PlotTypes.PIE_CHART:
@@ -72,3 +75,6 @@ class PlotLyCanvas(QWebEngineView):
 
     def set_title(self, text=''):
         self.title = text
+
+    def show_histogram(self):
+        self.histogram = not self.histogram
