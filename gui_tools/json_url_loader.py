@@ -32,6 +32,8 @@ class JsonUrlOpen(QWidget):
             try:
                 data = pd.read_json(url)
                 self.dv.set_data(data)
+                self.dv.canvas_controller.upload_data(data)
+                
             except Exception:
                 self._err_msg_box(str_defs.URL_NOT_WORK_TITLE[self.language],
                                   str_defs.URL_NOT_WORK_MAIN[self.language],
