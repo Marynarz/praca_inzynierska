@@ -43,7 +43,7 @@ class JsonUrlOpen(QWidget):
     @staticmethod
     def validate_url(url):
         if not validators.url(url):
-            url = 'http://' + url
+            url = 'https://' + url
             return validators.url(url), url
         return True, url
 
