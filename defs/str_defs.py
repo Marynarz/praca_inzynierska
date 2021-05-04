@@ -15,6 +15,9 @@ SETTINGS_MENU = {LANG_PL: '&Ustawienia', LANG_ENG: '&Settings'}
 LANG_CHANGE = {LANG_PL: '&Język', LANG_ENG: '&Language'}
 POLISH = {LANG_PL: '&Polski', LANG_ENG: '&Polish'}
 ENGLISH = {LANG_PL: '&Angielski', LANG_ENG: '&English'}
+VIEW_MENU = {LANG_PL: '&Widok', LANG_ENG: '&View'}
+REOPEN_DOCK_STR = {LANG_PL: '&Narzędzia', LANG_ENG: '&Tools'}
+JSON_LOADER = {LANG_PL: '&Załaduj plik JSON', LANG_PL: '&Load JSON file'}
 
 SHOW_DATA = {LANG_PL:'Pokaż dane', LANG_ENG: 'Show data'}
 

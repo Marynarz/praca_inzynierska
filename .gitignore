@@ -30,3 +30,14 @@
 *.exe
 *.out
 *.app
+
+# Miscalenous
+*.txt
+*.html
+*.coverage
+*.json
+
+# Folder
+env/
+*/__pycache__/
+*/*/__pycache__/

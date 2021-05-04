@@ -34,7 +34,12 @@ class TabsView(QMainWindow):
         self.data_viewer = data_viewer.DataViewer(parent=self, language=self.language, log=self.log,
                                                   canvas_controller=self.canvas_controller)
         self.json_loader = json_url_loader.JsonUrlOpen(self.data_viewer, self.language)
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.data_viewer.create_dock())
+
+        #dock
+        self.main_tool_dock = self.data_viewer.create_dock()
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.main_tool_dock)
+
+        #data viewer
         self.data_viewer.set_data(pd.DataFrame(app_defs.DEFAULT_PLOT))
         self._central_widget.addTab(self.data_viewer, str_defs.SHOW_DATA[self.language])
 
@@ -80,6 +85,10 @@ class TabsView(QMainWindow):
         self.menu.addAction(self.exit_action)
         self.exit_action.triggered.connect(self.close)
 
+        # View
+        self.view_menu = self.menuBar().addMenu(str_defs.VIEW_MENU[self.language])
+        self.view_menu.addAction(self.reopen_dock_action)
+
         # settings menu
         self.sets = self.menuBar().addMenu(str_defs.SETTINGS_MENU[self.language])
 
@@ -112,8 +121,11 @@ class TabsView(QMainWindow):
         self.lang_eng_action = QAction(str_defs.ENGLISH[self.language], self)
         self.lang_eng_action.triggered.connect(lambda: self.set_lang(str_defs.LANG_ENG))
 
-        self.json_loader_action = QAction("Load Json", self)
+        self.json_loader_action = QAction(str_defs.JSON_LOADER[self.language], self)
         self.json_loader_action.triggered.connect(self.open_json)
+
+        self.reopen_dock_action = QAction(str_defs.REOPEN_DOCK_STR[self.language], self)
+        self.reopen_dock_action.triggered.connect(self.reopen_dock)
 
     def _create_tool_bar(self):
         tools_toolbar = QToolBar('Tools')
@@ -173,3 +185,10 @@ class TabsView(QMainWindow):
 
     def load_data(self):
         self.canvas_controller.upload_data(data=self.data_viewer.get_data())
+
+    def reopen_dock(self):
+        if not self.main_tool_dock.isVisible():
+            self.main_tool_dock.show()
+            self.set_status('Dock reopened')
+        else:
+            self.set_status('Dock already open')
