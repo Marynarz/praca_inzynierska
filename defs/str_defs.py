@@ -17,7 +17,7 @@ POLISH = {LANG_PL: '&Polski', LANG_ENG: '&Polish'}
 ENGLISH = {LANG_PL: '&Angielski', LANG_ENG: '&English'}
 VIEW_MENU = {LANG_PL: '&Widok', LANG_ENG: '&View'}
 REOPEN_DOCK_STR = {LANG_PL: '&Narzędzia', LANG_ENG: '&Tools'}
-JSON_LOADER = {LANG_PL: '&Załaduj plik JSON', LANG_PL: '&Load JSON file'}
+JSON_LOADER = {LANG_PL: '&Załaduj plik JSON', LANG_ENG: '&Load JSON file'}
 
 SHOW_DATA = {LANG_PL:'Pokaż dane', LANG_ENG: 'Show data'}
 
