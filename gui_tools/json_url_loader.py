@@ -33,7 +33,7 @@ class JsonUrlOpen(QWidget):
                 data = pd.read_json(url)
                 self.dv.set_data(data)
                 self.dv.canvas_controller.upload_data(data)
-                
+
             except Exception:
                 self._err_msg_box(str_defs.URL_NOT_WORK_TITLE[self.language],
                                   str_defs.URL_NOT_WORK_MAIN[self.language],
@@ -52,7 +52,7 @@ class JsonUrlOpen(QWidget):
     # Error massage box for class JsonUrlOpen
     # A lot of things can go wrong, in every bad scenario we should inform user
     @staticmethod
-    def _err_msg_box(title, text, additional_txt= ''):
+    def _err_msg_box(title, text, additional_txt=''):
         not_valid_msg = QMessageBox()
         not_valid_msg.setIcon(QMessageBox.Warning)
         not_valid_msg.setWindowTitle(title)
@@ -60,4 +60,3 @@ class JsonUrlOpen(QWidget):
         not_valid_msg.setInformativeText(additional_txt)
         not_valid_msg.setStandardButtons(QMessageBox.Ok)
         _ = not_valid_msg.exec()
-

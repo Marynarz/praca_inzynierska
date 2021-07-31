@@ -15,7 +15,8 @@ class PlotLyCanvas(QWebEngineView):
         self.grid = False
         self.plot_type = PlotTypes.D2_CHART
         self.data = pd.DataFrame((0, ), index=(0, ))
-        self.fig = px.line(self.data, y=self.data.index.name, x=self.data.index.name)
+        self.fig = px.line(self.data, y=self.data.index.name,
+                           x=self.data.index.name)
 
         self.raw_html_head = '<html><head><meta charset="utf-8" />' \
                              '<script src="https://cdn.plot.ly/plotly-latest.min.js"></script></head>' \
@@ -59,7 +60,7 @@ class PlotLyCanvas(QWebEngineView):
         self.show()
 
     def clear_plot(self):
-        pass # to be implemented in future
+        pass  # to be implemented in future
 
     def set_grid_(self, state):
         self.grid = state

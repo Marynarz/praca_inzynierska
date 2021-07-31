@@ -49,13 +49,14 @@ class DataViewer(QTableView):
             self.log = logger.Logger('data_viewer')
         self.canvas_controller = kwargs['canvas_controller']
         self.log.write_log(app_defs.INFO_MSG,
-                                    '{0!s} executed successfully'.format(self.FNAME_TEMPLATE.format('init')))
+                           '{0!s} executed successfully'.format(self.FNAME_TEMPLATE.format('init')))
 
     def create_dock(self):
         main_tools_dock = QDockWidget(str_defs.DOCK_TITLE[self.language], self)
         dock_tabs = QTabWidget()
 
-        dock_tabs.addTab(self._create_tab_overall(), str_defs.OVRALL[self.language])
+        dock_tabs.addTab(self._create_tab_overall(),
+                         str_defs.OVRALL[self.language])
         dock_tabs.addTab(self._create_tab_x(), 'X')
         dock_tabs.addTab(self._create_tab_y(), 'Y')
 
@@ -71,7 +72,7 @@ class DataViewer(QTableView):
         self.set_grid_box = QCheckBox(str_defs.GRID[self.language], self)
         self.set_grid_box.setChecked(self.grid)
         self.set_grid_box.stateChanged.connect(self.set_grid)
-        
+
         # set plot type
         self.plot_type_box = QComboBox()
         self.plot_type_box.addItems(str_defs.PLOT_TYPES[self.language])
@@ -169,7 +170,8 @@ class DataViewer(QTableView):
 
     def set_data(self, data):
         fname = self.FNAME_TEMPLATE.format('set_data')
-        self.log.write_log(app_defs.INFO_MSG, '{0!s}: Setting data into DataFrame'.format(fname))
+        self.log.write_log(app_defs.INFO_MSG,
+                           '{0!s}: Setting data into DataFrame'.format(fname))
         self.data = pd.DataFrame()
         self.data = data
         self.col_names = ['index'] + list(self.data.columns.values)
@@ -197,14 +199,15 @@ class DataViewer(QTableView):
                 self.data.sort_values(by=self.data.columns[self.sort_items.currentIndex() - 1], inplace=True,
                                       ignore_index=True)
                 self.log.write_log(app_defs.INFO_MSG,
-                                            '%s: all values in dataframe are sorted by {%s}' %
-                                            (fname, self.data.columns[self.sort_items.currentIndex() - 1]))
+                                   '%s: all values in dataframe are sorted by {%s}' %
+                                   (fname, self.data.columns[self.sort_items.currentIndex() - 1]))
             else:
                 self.data.sort_index(inplace=True)
-                self.log.write_log(app_defs.INFO_MSG, '%s: Data sorted by index' % fname)
+                self.log.write_log(app_defs.INFO_MSG,
+                                   '%s: Data sorted by index' % fname)
         except Exception as e:
             self.log.write_log(app_defs.WARNING_MSG, '%s: unable to sort values, exception = {%s}' % (fname,
-                                                                                                               e))
+                                                                                                      e))
 
         self.show_data()
         self.canvas_controller.upload_data(self.data)
@@ -250,7 +253,8 @@ class DataViewer(QTableView):
 
     def set_grid(self):
         grid = self.canvas_controller.grid
-        self.log.write_log(app_defs.INFO_MSG, 'grid set to {0}'.format(not grid))
+        self.log.write_log(app_defs.INFO_MSG,
+                           'grid set to {0}'.format(not grid))
 
         self.canvas_controller.set_grid()
 
@@ -261,6 +265,8 @@ class DataViewer(QTableView):
         self.data_viewer.upd_grid()
 
     def set_title(self):
-        self.log.write_log(app_defs.INFO_MSG, 'Set plot title: {0}'.format(self.title_input.text()))
-        self.par_.set_status('Set plot title: {0}'.format(self.title_input.text()))
+        self.log.write_log(
+            app_defs.INFO_MSG, 'Set plot title: {0}'.format(self.title_input.text()))
+        self.par_.set_status(
+            'Set plot title: {0}'.format(self.title_input.text()))
         self.canvas_controller.set_title(self.title_input.text())

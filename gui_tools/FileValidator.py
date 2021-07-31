@@ -20,10 +20,12 @@ class FileValidator(object):
 
         filetype = source_file.split('.')[-1]
         try:
-            self.log.write_log(app_defs.INFO_MSG, '%s: file type chosen to validate: {%s}' % (fname, filetype))
+            self.log.write_log(
+                app_defs.INFO_MSG, '%s: file type chosen to validate: {%s}' % (fname, filetype))
             eval(self.validators_dict[filetype])(source_file)
         except KeyError as e:
-            self.log.write_log(app_defs.INFO_MSG, '%s: Unknown file type for file: {%s}' % (fname, source_file))
+            self.log.write_log(
+                app_defs.INFO_MSG, '%s: Unknown file type for file: {%s}' % (fname, source_file))
             return app_defs.UNKNOWN_FILE_TYPE
         except Exception as e:
             self.log.write_log(app_defs.ERROR_MSG, '%s: Exception while handling file: %s, exception details {%s}'
@@ -42,14 +44,16 @@ class FileValidator(object):
                 first_line = first_line.split(' ')
                 float(first_line[0])
             except ValueError:
-                self.log.write_log(app_defs.INFO_MSG, '%s: file with header. header: %s' % (fname, first_line))
+                self.log.write_log(
+                    app_defs.INFO_MSG, '%s: file with header. header: %s' % (fname, first_line))
                 header = 0
 
         self.values_pd = pd.read_csv(source_file, sep=" ", header=header)
 
     def validate_csv_file(self, source_file):
         fname = self.FNAME_PATTERN % 'validate_csv_file'
-        self.log.write_log(app_defs.INFO_MSG, '%s: csv file chosen, validate' % fname)
+        self.log.write_log(app_defs.INFO_MSG,
+                           '%s: csv file chosen, validate' % fname)
 
         header = None
         with open(source_file, 'r') as f:
@@ -58,24 +62,28 @@ class FileValidator(object):
                 first_line = first_line.split(',')
                 float(first_line[0])
             except ValueError:
-                self.log.write_log(app_defs.INFO_MSG, '%s: file with header. header: %s' % (fname, first_line))
+                self.log.write_log(
+                    app_defs.INFO_MSG, '%s: file with header. header: %s' % (fname, first_line))
                 header = 0
 
         self.values_pd = pd.read_csv(source_file, header=header)
 
     def validate_json_file(self, source_file):
         fname = self.FNAME_PATTERN % 'validate_json_file'
-        self.log.write_log(app_defs.INFO_MSG, '%s: json file chosen, validate' % fname)
+        self.log.write_log(app_defs.INFO_MSG,
+                           '%s: json file chosen, validate' % fname)
 
         self.values_pd = pd.read_json(source_file)
 
     def get_values(self):
         fname = self.FNAME_PATTERN % 'get_values'
-        self.log.write_log(app_defs.INFO_MSG, '%s: returning pandas data frame' % fname)
+        self.log.write_log(app_defs.INFO_MSG,
+                           '%s: returning pandas data frame' % fname)
         return self.values_pd
 
     def clear_values(self):
         fname = self.FNAME_PATTERN % 'clear_values'
         self.log.write_log(app_defs.INFO_MSG, '%s: clear values' % fname)
         self.values_pd = self.values_pd[0:0]
-        self.log.write_log(app_defs.INFO_MSG, '%s: check if empty: %s' % (fname, self.values_pd.empty))
+        self.log.write_log(app_defs.INFO_MSG, '%s: check if empty: %s' % (
+            fname, self.values_pd.empty))

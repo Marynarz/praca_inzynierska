@@ -29,7 +29,8 @@ def percent_to_radius(data, column_name):
 def dataframe_to_radius(data, column_idx):
 
     ret_data = copy.deepcopy(data)
-    ret_data['Percent'] = round((data[data.columns[column_idx]] / data[data.columns[column_idx]].sum()) * 100, 2)
+    ret_data['Percent'] = round(
+        (data[data.columns[column_idx]] / data[data.columns[column_idx]].sum()) * 100, 2)
     return percent_to_radius(ret_data, 'Percent')
 
 

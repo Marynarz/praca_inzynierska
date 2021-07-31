@@ -1,10 +1,10 @@
+import pandas as pd
+from defs.app_defs import PlotTypes
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
+from PyQt5 import QtWidgets
 import matplotlib
 matplotlib.use('Qt5Agg')
-from PyQt5 import QtWidgets
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
-from matplotlib.figure import Figure
-from defs.app_defs import PlotTypes
-import pandas as pd
 
 
 class MplCanvas(FigureCanvasQTAgg):
@@ -27,7 +27,8 @@ class MplCanvas(FigureCanvasQTAgg):
         self.clear_plot()
         self.show_plot()
 
-        FigureCanvasQTAgg.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        FigureCanvasQTAgg.setSizePolicy(
+            self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         FigureCanvasQTAgg.updateGeometry(self)
 
     def upload_data(self, data):
@@ -40,10 +41,12 @@ class MplCanvas(FigureCanvasQTAgg):
             if self.histogram:
                 self.data.hist()
         elif self.plot_type == PlotTypes.BAR_CHART:
-            self.data.plot.bar(ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name, title=self.title)
+            self.data.plot.bar(
+                ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name, title=self.title)
         elif self.plot_type == PlotTypes.PIE_CHART:
             self._check_validate_y()
-            self.data.plot.pie(ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name, title=self.title)
+            self.data.plot.pie(
+                ax=self.axes, x=self.data.columns[self.now_x].name, y=self.data.columns[self.now_y].name, title=self.title)
         self.axes.grid(self.grid)
         self.draw()
 
@@ -54,7 +57,7 @@ class MplCanvas(FigureCanvasQTAgg):
         self.grid = state
 
     def set_line(self):
-        pass # to be implemented in future
+        pass  # to be implemented in future
 
     def set_plot_type(self, type_no):
         self.plot_type = type_no

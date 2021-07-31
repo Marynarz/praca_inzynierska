@@ -37,7 +37,8 @@ class PyQtGraphCanvas(pg.PlotWidget):
         if self.plot_type == PlotTypes.D2_CHART:
             self.plot(self.x_pos, self.y_pos, title=self.title)
         elif self.plot_type == PlotTypes.BAR_CHART:
-            bar_chart = pg.BarGraphItem(x=self.x_pos, height=self.y_pos, width=0.6, brush='r', title=self.title)
+            bar_chart = pg.BarGraphItem(
+                x=self.x_pos, height=self.y_pos, width=0.6, brush='r', title=self.title)
             self.addItem(bar_chart)
         elif self.plot_type == PlotTypes.PIE_CHART:
             print('Pie chart not implemented yet')

@@ -14,7 +14,8 @@ class Logger(object):
         self.append = 'a' if append else 'w+'
 
         with open(self.file_name, self.append) as f:
-            f.write('Start logging at: ' + str(time.time()) + ' from: ' + log_point + '\n')
+            f.write('Start logging at: ' + str(time.time()) +
+                    ' from: ' + log_point + '\n')
 
     def write_log(self, msg_code, msg):
         with open(self.file_name, 'a') as f:

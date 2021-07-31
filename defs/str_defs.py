@@ -19,7 +19,7 @@ VIEW_MENU = {LANG_PL: '&Widok', LANG_ENG: '&View'}
 REOPEN_DOCK_STR = {LANG_PL: '&Narzędzia', LANG_ENG: '&Tools'}
 JSON_LOADER = {LANG_PL: '&Załaduj plik JSON', LANG_ENG: '&Load JSON file'}
 
-SHOW_DATA = {LANG_PL:'Pokaż dane', LANG_ENG: 'Show data'}
+SHOW_DATA = {LANG_PL: 'Pokaż dane', LANG_ENG: 'Show data'}
 
 # components
 MAT_PLOT_LIB = 'Matplotlib'
@@ -43,17 +43,21 @@ OVRALL = {LANG_PL: 'Ogólne', LANG_ENG: 'Overall'}
 SORT = {LANG_PL: 'Sortuj', LANG_ENG: 'Sort'}
 SORT_TOOL = {LANG_PL: 'Narzędzia sortowania', LANG_ENG: 'Sorting tools'}
 TEXT_MANIPULTORS = {LANG_PL: 'Etykiety', LANG_ENG: 'Labels'}
-TITLE_ADD = {LANG_PL: 'Tytuł', LANG_ENG:'Title'}
+TITLE_ADD = {LANG_PL: 'Tytuł', LANG_ENG: 'Title'}
 X_AXIS_LABELS = {LANG_PL: 'Oś X', LANG_ENG: 'X axis'}
 
 # JsonUrlOpen
 WRONG_URL_TITLE = {LANG_PL: 'Błędny adres', LANG_ENG: 'Wrong url'}
-WRONG_URL_MAIN = {LANG_PL: 'Weryfikacja adresu się nie powiodła', LANG_ENG: 'Url validation not passed'}
-WRONG_URL_ADDITIONAL = {LANG_PL: '{0} jest błędny', LANG_ENG: '{0} is not valid url'}
+WRONG_URL_MAIN = {LANG_PL: 'Weryfikacja adresu się nie powiodła',
+                  LANG_ENG: 'Url validation not passed'}
+WRONG_URL_ADDITIONAL = {LANG_PL: '{0} jest błędny',
+                        LANG_ENG: '{0} is not valid url'}
 
 URL_NOT_WORK_TITLE = {LANG_PL: 'Adres nie działa', LANG_ENG: 'Url not working'}
-URL_NOT_WORK_MAIN = {LANG_PL: 'Adres nie działa poprawnie', LANG_ENG: 'Your url not working properly'}
-URL_NOT_WORK_ADDITIONAL = {LANG_PL: 'Sprawdź czy adres jest poprawny', LANG_ENG: 'Double check address'}
+URL_NOT_WORK_MAIN = {LANG_PL: 'Adres nie działa poprawnie',
+                     LANG_ENG: 'Your url not working properly'}
+URL_NOT_WORK_ADDITIONAL = {
+    LANG_PL: 'Sprawdź czy adres jest poprawny', LANG_ENG: 'Double check address'}
 
 URL_TITLE = {LANG_PL: 'Załaduj plik JSON', LANG_ENG: 'Load JSON file'}
 URL_LINE_EDIT = {LANG_PL: 'Tutaj wpisz adres', LANG_ENG: 'Type url here'}
